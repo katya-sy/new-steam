@@ -1,3 +1,4 @@
+import { Comment } from "@/components/comment";
 import { GameMainInfo } from "@/components/game-main-info";
 import { Header } from "@/components/header";
 import Image from "next/image";
@@ -51,6 +52,29 @@ export default function Game() {
         </div>
         <div className="flex flex-col gap-5">
           <h4 className="font-medium text-2xl">Обсуждение</h4>
+          <div className="flex flex-col gap-3">
+            <Comment />
+            <div className="flex flex-col gap-3 ml-12 border-l-2 border-l-blue">
+              <Comment />
+              <Comment />
+              <div className="flex flex-col gap-3 ml-12 border-l-2 border-l-blue">
+                <Comment />
+                <div className="flex flex-col gap-3 ml-12 border-l-2 border-l-blue">
+                  <Comment />
+                  <Comment />
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col gap-3 ml-12 border-l-2 border-l-blue">
+              <Comment />
+              <div className="flex flex-col gap-3 ml-12 border-l-2 border-l-blue">
+                <Comment />
+                <div className="flex flex-col gap-3 ml-12 border-l-2 border-l-blue">
+                  <Comment />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
