@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { GameList } from "./game-list";
 import Link from "next/link";
+import { GameCard } from "./game-card";
 
 export const HomeGameList = () => {
   return (
@@ -20,7 +20,11 @@ export const HomeGameList = () => {
           Вышла
         </div>
       </Link>
-      <GameList />
+      <div className="gap-5 grid grid-cols-5">
+        {[1, 2, 3, 4, 5].map((item) => (
+          <GameCard key={item} />
+        ))}
+      </div>
     </div>
   );
 };

@@ -30,10 +30,7 @@ const config: Config = {
     extend: {
       colors: {
         bg: "#212121",
-        blue: {
-          DEFAULT: "#677DFF",
-          light: "#f9f5e8",
-        },
+        blue: "#677DFF",
         grey: "#edf0f5",
       },
       fontFamily: {
