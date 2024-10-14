@@ -43,14 +43,14 @@ export default function Game() {
           Nam ut odio venenatis, aliquam mauris nec, iaculis tortor. Donec
           rutrum feugiat neque vel congue.
         </p>
-        <div className="flex flex-col gap-5">
+        <div id="review" className="flex flex-col gap-5">
           <h4 className="font-medium text-2xl">Обзор</h4>
           <iframe
             className="min-h-[500px]"
             src="https://www.youtube.com/watch?v=jfKfPfyJRdk"
           />
         </div>
-        <div className="flex flex-col gap-5">
+        <div id="comments" className="flex flex-col gap-5">
           <h4 className="font-medium text-2xl">Обсуждение</h4>
           <div className="flex flex-col gap-3">
             <Comment />

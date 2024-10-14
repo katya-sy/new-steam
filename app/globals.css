@@ -11,6 +11,10 @@
   }
 }
 
+* {
+  scroll-behavior: smooth;
+}
+
 .toggle[data-state="on"] {
   @apply bg-blue text-bg;
 }

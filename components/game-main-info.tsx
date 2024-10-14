@@ -63,10 +63,10 @@ export const GameMainInfo = () => {
         </div>
         <GameListSelect />
         <div className="flex items-baseline gap-10 font-medium">
-          <Link className="text-blue" href="#">
+          <Link className="text-blue" href="#review">
             Обзор
           </Link>
-          <Link className="text-blue" href="#">
+          <Link className="text-blue" href="#comments">
             Обсуждение
           </Link>
         </div>
