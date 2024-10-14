@@ -7,7 +7,9 @@ export const Header = () => {
     <header className="border-b-2 border-blue">
       <div className="flex justify-between items-center py-7 container">
         <div className="flex items-center gap-10">
-          <Image src="/logo.svg" width={42} height={42} alt="Logo" />
+          <Link href="/">
+            <Image src="/logo.svg" width={42} height={42} alt="Logo" />
+          </Link>
           <Link className="font-medium text-blue" href="/user">
             Личный кабинет
           </Link>

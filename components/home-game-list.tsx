@@ -6,7 +6,7 @@ export const HomeGameList = () => {
   return (
     <div className="flex flex-col gap-10">
       <Link
-        href=""
+        href="/game/1"
         className="relative flex w-full max-h-[500px] overflow-hidden"
       >
         <Image

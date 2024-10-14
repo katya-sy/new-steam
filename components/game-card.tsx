@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Rating } from "./rating";
 import { GameListSelect } from "./game-list-select";
+import Link from "next/link";
 
 export const GameCard = () => {
   return (
@@ -20,9 +21,12 @@ export const GameCard = () => {
           <Rating />
         </div>
         <div className="flex flex-col gap-3">
-          <button className="bg-blue px-5 py-2 w-full text-bg text-xl">
+          <Link
+            href="/game/1"
+            className="bg-blue px-5 py-2 w-full text-bg text-center text-xl"
+          >
             Подробнее
-          </button>
+          </Link>
           <GameListSelect />
         </div>
       </div>
