@@ -3,6 +3,7 @@ import { Rating } from "./rating";
 import { Edit } from "./shared/edit";
 import * as Tabs from "@radix-ui/react-tabs";
 import { Plus } from "./shared/plus";
+import { FavoriteList } from "./favorite-list";
 
 export const ProfileSidebar = () => {
   const isCurrentUser = true;
@@ -79,6 +80,7 @@ export const ProfileSidebar = () => {
           </button>
         </div>
       </Tabs.List>
+      <FavoriteList />
     </div>
   );
 };

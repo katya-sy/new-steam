@@ -6,6 +6,7 @@ const jost = Jost({
   weight: ["400", "500"],
   style: "normal",
   subsets: ["cyrillic"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
