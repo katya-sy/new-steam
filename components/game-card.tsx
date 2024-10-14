@@ -4,7 +4,7 @@ import * as Select from "@radix-ui/react-select";
 
 export const GameCard = () => {
   return (
-    <div className="flex flex-col gap-5">
+    <div className="relative flex flex-col gap-5">
       <div className="flex justify-center items-center bg-black/10 w-full overflow-hidden aspect-square">
         <Image
           src="/game-img.jpeg"
@@ -72,6 +72,9 @@ export const GameCard = () => {
             </Select.Portal>
           </Select.Root>
         </div>
+      </div>
+      <div className="top-2 right-2 absolute border-[#00FF00] bg-bg/90 px-1 border text-sm">
+        Выходит
       </div>
     </div>
   );
