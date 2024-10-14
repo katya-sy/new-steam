@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { Rating } from "./rating";
 import { Edit } from "./shared/edit";
+import * as Tabs from "@radix-ui/react-tabs";
+import { Plus } from "./shared/plus";
 
 export const ProfileSidebar = () => {
   const isCurrentUser = true;
@@ -44,6 +46,39 @@ export const ProfileSidebar = () => {
           </button>
         )}
       </div>
+      <Tabs.List className="flex flex-col gap-10">
+        <div className="flex flex-col gap-3">
+          <Tabs.Trigger
+            className="flex justify-center items-center gap-3 p-2 border border-blue w-full font-medium tabs-trigger"
+            value="wish"
+          >
+            Хочу поиграть <span className="text-sm">28</span>
+          </Tabs.Trigger>
+          <Tabs.Trigger
+            className="flex justify-center items-center gap-3 p-2 border border-blue w-full font-medium tabs-trigger"
+            value="play"
+          >
+            Играю <span className="text-sm">45</span>
+          </Tabs.Trigger>
+          <Tabs.Trigger
+            className="flex justify-center items-center gap-3 p-2 border border-blue w-full font-medium tabs-trigger"
+            value="finish"
+          >
+            Поиграл <span className="text-sm">23</span>
+          </Tabs.Trigger>
+        </div>
+        <div className="flex items-center gap-5">
+          <Tabs.Trigger
+            className="flex justify-center items-center gap-3 p-2 border border-blue w-full font-medium tabs-trigger"
+            value="add"
+          >
+            Добавил <span className="text-sm">3</span>
+          </Tabs.Trigger>
+          <button className="text-blue">
+            <Plus />
+          </button>
+        </div>
+      </Tabs.List>
     </div>
   );
 };

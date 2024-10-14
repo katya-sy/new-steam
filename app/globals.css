@@ -14,3 +14,7 @@
 .toggle[data-state="on"] {
   @apply bg-blue text-bg;
 }
+
+.tabs-trigger[data-state="active"] {
+  @apply bg-blue text-bg;
+}
