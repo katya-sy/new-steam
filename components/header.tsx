@@ -8,7 +8,7 @@ export const Header = () => {
       <div className="flex justify-between items-center py-7 container">
         <div className="flex items-center gap-10">
           <Image src="/logo.svg" width={42} height={42} alt="Logo" />
-          <Link className="font-medium text-blue" href="/">
+          <Link className="font-medium text-blue" href="">
             Личный кабинет
           </Link>
         </div>
