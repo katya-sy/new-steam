@@ -9,7 +9,7 @@ export default function Game() {
       <Header />
       <div className="flex flex-col gap-10 my-12 container">
         <GameMainInfo />
-        <div className="gap-5 grid grid-cols-6">
+        <div className="gap-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
           {[1, 2, 3, 4, 5, 6].map((item) => (
             <div
               key={item}
@@ -46,30 +46,30 @@ export default function Game() {
         <div id="review" className="flex flex-col gap-5">
           <h4 className="font-medium text-2xl">Обзор</h4>
           <iframe
-            className="min-h-[500px]"
+            className="min-h-60 md:min-h-[500px] xs:min-h-80"
             src="https://www.youtube.com/watch?v=jfKfPfyJRdk"
           />
         </div>
         <div id="comments" className="flex flex-col gap-5">
           <h4 className="font-medium text-2xl">Обсуждение</h4>
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3 -ml-5">
             <Comment />
-            <div className="flex flex-col gap-3 ml-12 border-l-2 border-l-blue">
+            <div className="flex flex-col gap-3 ml-5 md:ml-12 border-l-2 border-l-blue">
               <Comment />
               <Comment />
-              <div className="flex flex-col gap-3 ml-12 border-l-2 border-l-blue">
+              <div className="flex flex-col gap-3 ml-5 md:ml-12 border-l-2 border-l-blue">
                 <Comment />
-                <div className="flex flex-col gap-3 ml-12 border-l-2 border-l-blue">
+                <div className="flex flex-col gap-3 ml-5 md:ml-12 border-l-2 border-l-blue">
                   <Comment />
                   <Comment />
                 </div>
               </div>
             </div>
-            <div className="flex flex-col gap-3 ml-12 border-l-2 border-l-blue">
+            <div className="flex flex-col gap-3 ml-5 md:ml-12 border-l-2 border-l-blue">
               <Comment />
-              <div className="flex flex-col gap-3 ml-12 border-l-2 border-l-blue">
+              <div className="flex flex-col gap-3 ml-5 md:ml-12 border-l-2 border-l-blue">
                 <Comment />
-                <div className="flex flex-col gap-3 ml-12 border-l-2 border-l-blue">
+                <div className="flex flex-col gap-3 ml-5 md:ml-12 border-l-2 border-l-blue">
                   <Comment />
                 </div>
               </div>

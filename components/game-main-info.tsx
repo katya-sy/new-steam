@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export const GameMainInfo = () => {
   return (
-    <div className="flex gap-32">
+    <div className="flex max-md:flex-col gap-10 lg:gap-32">
       <div className="flex justify-center items-center bg-black/10 min-h-full overflow-hidden">
         <Image
           src="/game-img.jpeg"
@@ -15,10 +15,10 @@ export const GameMainInfo = () => {
           alt="Game"
         />
       </div>
-      <div className="flex flex-col gap-10">
+      <div className="flex flex-col gap-5 md:gap-5">
         <div className="flex flex-col gap-5">
-          <div className="flex items-center gap-10">
-            <h1 className="font-medium text-4xl">Дота 100</h1>
+          <div className="relative flex max-lg:flex-wrap items-center gap-x-10 gap-y-2">
+            <h1 className="font-medium text-3xl lg:text-4xl">Дота 100</h1>
             <Rating />
             <div className="border-[#00FF00] bg-bg/90 px-1 border text-xl">
               Вышла
@@ -29,7 +29,7 @@ export const GameMainInfo = () => {
             <div className="px-2 py-1 border border-blue">Хоррор</div>
           </div>
           <div className="flex flex-col gap-3">
-            <div className="flex items-center gap-10">
+            <div className="flex flex-wrap items-center gap-x-10 gap-y-1">
               <p className="font-medium text-white/60">
                 Добавлена 2 октября 2024
               </p>

@@ -4,7 +4,7 @@ import * as Select from "@radix-ui/react-select";
 export const GameListSelect = () => {
   return (
     <Select.Root>
-      <Select.Trigger className="flex justify-between items-center px-5 py-2 border border-blue w-full font-medium text-xl">
+      <Select.Trigger className="flex justify-between items-center px-5 py-2 border border-blue w-full font-medium text-base md:text-xl">
         <Select.Value placeholder="В список" />
         <Select.Icon asChild className="pt-1">
           <Arrow />

@@ -10,7 +10,7 @@ import { RegForm } from "./reg-form";
 export const Header = () => {
   return (
     <header className="border-b-2 border-blue">
-      <div className="flex justify-between items-center py-7 container">
+      <div className="flex flex-wrap justify-between items-center gap-x-10 gap-y-4 py-7 container">
         <div className="flex items-center gap-10">
           <Link href="/">
             <Image src="/logo.svg" width={42} height={42} alt="Logo" />
@@ -25,7 +25,7 @@ export const Header = () => {
               </Dialog.Trigger>
               <Dialog.Portal>
                 <Dialog.Overlay className="absolute inset-0 bg-black/70" />
-                <Dialog.Content className="top-1/2 left-1/2 fixed bg-bg p-5 rounded-lg w-[500px] -translate-x-1/2 -translate-y-1/2">
+                <Dialog.Content className="top-1/2 left-1/2 fixed bg-bg p-5 rounded-lg w-[calc(100%-32px)] sm:w-[500px] -translate-x-1/2 -translate-y-1/2">
                   <Tabs.Root
                     className="flex flex-col gap-12"
                     defaultValue="auth"
@@ -59,7 +59,7 @@ export const Header = () => {
             </Dialog.Root>
           </div>
         </div>
-        <div className="w-1/2">
+        <div className="w-full md:w-1/2">
           <Input placeholder="Поиск игр..." />
         </div>
       </div>
