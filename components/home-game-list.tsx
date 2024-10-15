@@ -20,14 +20,14 @@ export const HomeGameList = () => {
           Вышла
         </div>
       </Link>
-      <div className="gap-5 grid grid-cols-5">
+      <div className="gap-5 grid grid-cols-5 max-[1200px]:grid-cols-4 max-lg:grid-cols-3">
         {[1, 2, 3, 4, 5].map((item) => (
           <GameCard key={item} />
         ))}
       </div>
       <div className="flex flex-col gap-5">
         <h2 className="font-medium text-3xl">Новинки</h2>
-        <div className="gap-5 grid grid-cols-5">
+        <div className="gap-5 grid grid-cols-5 max-[1200px]:grid-cols-4 max-lg:grid-cols-3">
           {[1, 2, 3, 4, 5].map((item) => (
             <GameCard key={item} />
           ))}

@@ -10,8 +10,8 @@ export const GameCard = () => {
         <Image
           src="/game-img.jpeg"
           className="object-cover"
-          width={200}
-          height={200}
+          width={400}
+          height={400}
           alt="Game"
         />
       </div>
@@ -23,7 +23,7 @@ export const GameCard = () => {
         <div className="flex flex-col gap-3">
           <Link
             href="/game/1"
-            className="bg-blue px-5 py-2 w-full text-bg text-center text-xl"
+            className="bg-blue px-5 py-2 w-full text-base text-bg text-center md:text-xl"
           >
             Подробнее
           </Link>

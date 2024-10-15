@@ -54,22 +54,22 @@ export default function Game() {
           <h4 className="font-medium text-2xl">Обсуждение</h4>
           <div className="flex flex-col gap-3 -ml-5">
             <Comment />
-            <div className="flex flex-col gap-3 ml-5 md:ml-12 border-l-2 border-l-blue">
+            <div className="flex flex-col gap-3 ml-5 md:ml-12 border-l border-l-blue md:border-l-2">
               <Comment />
               <Comment />
-              <div className="flex flex-col gap-3 ml-5 md:ml-12 border-l-2 border-l-blue">
+              <div className="flex flex-col gap-3 ml-5 md:ml-12 border-l border-l-blue md:border-l-2">
                 <Comment />
-                <div className="flex flex-col gap-3 ml-5 md:ml-12 border-l-2 border-l-blue">
+                <div className="flex flex-col gap-3 ml-5 md:ml-12 border-l border-l-blue md:border-l-2">
                   <Comment />
                   <Comment />
                 </div>
               </div>
             </div>
-            <div className="flex flex-col gap-3 ml-5 md:ml-12 border-l-2 border-l-blue">
+            <div className="flex flex-col gap-3 ml-5 md:ml-12 border-l border-l-blue md:border-l-2">
               <Comment />
-              <div className="flex flex-col gap-3 ml-5 md:ml-12 border-l-2 border-l-blue">
+              <div className="flex flex-col gap-3 ml-5 md:ml-12 border-l border-l-blue md:border-l-2">
                 <Comment />
-                <div className="flex flex-col gap-3 ml-5 md:ml-12 border-l-2 border-l-blue">
+                <div className="flex flex-col gap-3 ml-5 md:ml-12 border-l border-l-blue md:border-l-2">
                   <Comment />
                 </div>
               </div>

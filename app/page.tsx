@@ -6,9 +6,9 @@ export default function Home() {
   return (
     <div>
       <Header />
-      <div className="gap-5 grid grid-cols-6 container">
+      <div className="gap-5 grid grid-cols-6 max-[1200px]:grid-cols-4 container">
         <FilterSidebar />
-        <div className="col-span-5 my-12">
+        <div className="col-span-5 max-[1200px]:col-span-3 my-12">
           <HomeGameList />
         </div>
       </div>
