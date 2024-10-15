@@ -11,7 +11,7 @@ export const GameListSelect = () => {
         </Select.Icon>
       </Select.Trigger>
       <Select.Portal>
-        <Select.Content className="bg-white rounded-sm text-bg">
+        <Select.Content className="bg-bg border border-blue rounded-sm text-white">
           <Select.ScrollUpButton />
           <Select.Viewport>
             <Select.Item
