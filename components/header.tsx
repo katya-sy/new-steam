@@ -1,6 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Input } from "./ui/input";
+import * as Dialog from "@radix-ui/react-dialog";
+import { Close } from "./shared/close";
+import * as Tabs from "@radix-ui/react-tabs";
+import { AuthForm } from "./auth-form";
+import { RegForm } from "./reg-form";
 
 export const Header = () => {
   return (
@@ -10,11 +15,53 @@ export const Header = () => {
           <Link href="/">
             <Image src="/logo.svg" width={42} height={42} alt="Logo" />
           </Link>
-          <Link className="font-medium text-blue" href="/user">
-            Личный кабинет
-          </Link>
+          <div className="flex items-center gap-5">
+            <Link className="font-medium text-blue" href="/user">
+              Личный кабинет
+            </Link>
+            <Dialog.Root>
+              <Dialog.Trigger className="font-medium text-blue">
+                Войти
+              </Dialog.Trigger>
+              <Dialog.Portal>
+                <Dialog.Overlay className="absolute inset-0 bg-black/70" />
+                <Dialog.Content className="top-1/2 left-1/2 fixed bg-bg p-5 rounded-lg w-[500px] -translate-x-1/2 -translate-y-1/2">
+                  <Tabs.Root
+                    className="flex flex-col gap-12"
+                    defaultValue="auth"
+                  >
+                    <Tabs.List className="flex items-baseline gap-10">
+                      <Tabs.Trigger
+                        className="font-medium text-white/60 text-xl dialog-tabs-trigger"
+                        value="auth"
+                      >
+                        Вход
+                      </Tabs.Trigger>
+                      <Tabs.Trigger
+                        className="font-medium text-white/60 text-xl dialog-tabs-trigger"
+                        value="reg"
+                      >
+                        Регистрация
+                      </Tabs.Trigger>
+                    </Tabs.List>
+                    <Tabs.Content value="auth">
+                      <AuthForm />
+                    </Tabs.Content>
+                    <Tabs.Content value="reg">
+                      <RegForm />
+                    </Tabs.Content>
+                  </Tabs.Root>
+                  <Dialog.Close className="top-2 right-2 absolute">
+                    <Close />
+                  </Dialog.Close>
+                </Dialog.Content>
+              </Dialog.Portal>
+            </Dialog.Root>
+          </div>
         </div>
-        <Input />
+        <div className="w-1/2">
+          <Input placeholder="Поиск игр..." />
+        </div>
       </div>
     </header>
   );

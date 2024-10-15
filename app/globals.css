@@ -22,3 +22,7 @@
 .tabs-trigger[data-state="active"] {
   @apply bg-blue text-bg;
 }
+
+.dialog-tabs-trigger[data-state="active"] {
+  @apply text-2xl text-white;
+}
