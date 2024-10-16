@@ -9,12 +9,12 @@ export default function User() {
       <Header />
       <Tabs.Root
         defaultValue="wish"
-        className="gap-5 grid grid-cols-6 max-[1200px]:grid-cols-4 container"
+        className="gap-5 grid grid-cols-6 max-[1200px]:grid-cols-4 max-md:grid-cols-1 container"
       >
         <ProfileSidebar />
-        <div className="col-span-5 max-[1200px]:col-span-3 my-12">
+        <div className="col-span-5 max-[1200px]:col-span-3 max-md:col-span-1 md:my-12 mt-0 mb-12">
           <Tabs.Content
-            className="gap-5 grid grid-cols-5 max-[1200px]:grid-cols-4 max-lg:grid-cols-3"
+            className="gap-5 grid grid-cols-5 max-[1200px]:grid-cols-4 max-sm:grid-cols-2 max-lg:grid-cols-3"
             value="wish"
           >
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item) => (
@@ -22,7 +22,7 @@ export default function User() {
             ))}
           </Tabs.Content>
           <Tabs.Content
-            className="gap-5 grid grid-cols-5 max-[1200px]:grid-cols-4 max-lg:grid-cols-3"
+            className="gap-5 grid grid-cols-5 max-[1200px]:grid-cols-4 max-sm:grid-cols-2 max-lg:grid-cols-3"
             value="play"
           >
             {[1, 2, 3, 4, 5, 6].map((item) => (
@@ -30,7 +30,7 @@ export default function User() {
             ))}
           </Tabs.Content>
           <Tabs.Content
-            className="gap-5 grid grid-cols-5 max-[1200px]:grid-cols-4 max-lg:grid-cols-3"
+            className="gap-5 grid grid-cols-5 max-[1200px]:grid-cols-4 max-sm:grid-cols-2 max-lg:grid-cols-3"
             value="finish"
           >
             {[1, 2].map((item) => (
@@ -38,7 +38,7 @@ export default function User() {
             ))}
           </Tabs.Content>
           <Tabs.Content
-            className="gap-5 grid grid-cols-5 max-[1200px]:grid-cols-4 max-lg:grid-cols-3"
+            className="gap-5 grid grid-cols-5 max-[1200px]:grid-cols-4 max-sm:grid-cols-2 max-lg:grid-cols-3"
             value="add"
           >
             {[1, 2, 3].map((item) => (
