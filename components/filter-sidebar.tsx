@@ -8,9 +8,9 @@ const tags = [
 
 export const FilterSidebar = () => {
   return (
-    <div className="flex flex-col gap-10 py-12 pr-5">
-      <div className="flex flex-col gap-5">
-        <h3 className="font-medium text-xl">Популярно</h3>
+    <div className="flex flex-col gap-5 md:gap-10 py-5 md:py-12 pr-5">
+      <div className="flex flex-col gap-2 md:gap-5">
+        <h3 className="font-medium text-lg md:text-xl">Популярно</h3>
         <ToggleGroup.Root type="multiple" className="flex flex-wrap gap-2">
           {tags.map((tag) => (
             <ToggleGroup.Item
