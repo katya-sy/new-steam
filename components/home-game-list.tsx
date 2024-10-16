@@ -16,7 +16,7 @@ export const HomeGameList = () => {
           height={360}
           alt="Game"
         />
-        <div className="top-5 right-5 absolute border-[#00FF00] bg-bg/90 px-1 border text-xl">
+        <div className="top-2 md:top-5 right-2 md:right-5 absolute border-[#00FF00] bg-bg/90 px-1 border md:text-xl">
           Вышла
         </div>
       </Link>

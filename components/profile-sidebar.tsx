@@ -49,37 +49,37 @@ export const ProfileSidebar = () => {
           )}
         </div>
       </div>
-      <Tabs.List className="flex md:flex-col max-md:flex-wrap max-md:justify-between gap-5 md:gap-10 max-md:row-start-3">
-        <div className="flex md:flex-col max-md:flex-wrap gap-3">
-          <Tabs.Trigger
-            className="flex justify-center items-center gap-3 p-2 border border-blue md:w-full font-medium tabs-trigger"
-            value="wish"
-          >
-            Хочу поиграть <span className="text-sm">28</span>
-          </Tabs.Trigger>
-          <Tabs.Trigger
-            className="flex justify-center items-center gap-3 p-2 border border-blue md:w-full font-medium tabs-trigger"
-            value="play"
-          >
-            Играю <span className="text-sm">45</span>
-          </Tabs.Trigger>
-          <Tabs.Trigger
-            className="flex justify-center items-center gap-3 p-2 border border-blue md:w-full font-medium tabs-trigger"
-            value="finish"
-          >
-            Поиграл <span className="text-sm">23</span>
-          </Tabs.Trigger>
-        </div>
-        <div className="flex items-center gap-5">
+      <Tabs.List className="flex md:flex-col max-md:flex-wrap gap-3 max-md:row-start-3">
+        <Tabs.Trigger
+          className="flex justify-center items-center gap-3 p-2 border border-blue md:w-full font-medium tabs-trigger"
+          value="wish"
+        >
+          Хочу поиграть <span className="text-sm">28</span>
+        </Tabs.Trigger>
+        <Tabs.Trigger
+          className="flex justify-center items-center gap-3 p-2 border border-blue md:w-full font-medium tabs-trigger"
+          value="play"
+        >
+          Играю <span className="text-sm">45</span>
+        </Tabs.Trigger>
+        <Tabs.Trigger
+          className="flex justify-center items-center gap-3 p-2 border border-blue md:w-full font-medium tabs-trigger"
+          value="finish"
+        >
+          Поиграл <span className="text-sm">23</span>
+        </Tabs.Trigger>
+        <div className="flex items-center gap-3 md:gap-5 md:mt-7 max-md:ml-3">
           <Tabs.Trigger
             className="flex justify-center items-center gap-3 p-2 border border-blue md:w-full font-medium tabs-trigger"
             value="add"
           >
             Добавил <span className="text-sm">3</span>
           </Tabs.Trigger>
-          <button className="text-blue">
-            <Plus />
-          </button>
+          {isCurrentUser && (
+            <button className="text-blue">
+              <Plus />
+            </button>
+          )}
         </div>
       </Tabs.List>
       <FavoriteList />

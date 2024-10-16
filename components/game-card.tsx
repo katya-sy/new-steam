@@ -17,7 +17,7 @@ export const GameCard = () => {
       </div>
       <div className="flex flex-col justify-between gap-5 font-medium">
         <div className="flex items-center gap-3">
-          <h3 className="text-2xl">Дота 100</h3>
+          <h3 className="text-xl md:text-2xl">Дота 100</h3>
           <Rating />
         </div>
         <div className="flex flex-col gap-3">
