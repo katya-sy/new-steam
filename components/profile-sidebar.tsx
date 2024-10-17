@@ -4,6 +4,9 @@ import { Edit } from "./shared/edit";
 import * as Tabs from "@radix-ui/react-tabs";
 import { Plus } from "./shared/plus";
 import { FavoriteList } from "./favorite-list";
+import { Close } from "./shared/close";
+import * as Dialog from "@radix-ui/react-dialog";
+import { AddGameForm } from "./add-game-form";
 
 export const ProfileSidebar = () => {
   const isCurrentUser = true;
@@ -76,9 +79,23 @@ export const ProfileSidebar = () => {
             Добавил <span className="text-sm">3</span>
           </Tabs.Trigger>
           {isCurrentUser && (
-            <button className="text-blue">
-              <Plus />
-            </button>
+            <Dialog.Root>
+              <Dialog.Trigger className="font-medium text-blue">
+                <Plus />
+              </Dialog.Trigger>
+              <Dialog.Portal>
+                <Dialog.Overlay className="absolute inset-0 bg-black/70" />
+                <Dialog.Content className="top-1/2 left-1/2 fixed flex flex-col gap-12 bg-bg p-5 rounded-lg w-[calc(100%-32px)] sm:w-[500px] -translate-x-1/2 -translate-y-1/2">
+                  <h3 className="font-medium text-2xl text-white">
+                    Добавление игры
+                  </h3>
+                  <AddGameForm />
+                  <Dialog.Close className="top-2 right-2 absolute">
+                    <Close />
+                  </Dialog.Close>
+                </Dialog.Content>
+              </Dialog.Portal>
+            </Dialog.Root>
           )}
         </div>
       </Tabs.List>
