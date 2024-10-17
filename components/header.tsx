@@ -26,6 +26,7 @@ export const Header = () => {
               <Dialog.Portal>
                 <Dialog.Overlay className="absolute inset-0 bg-black/70" />
                 <Dialog.Content className="top-1/2 left-1/2 fixed bg-bg p-5 rounded-lg w-[calc(100%-32px)] sm:w-[500px] -translate-x-1/2 -translate-y-1/2">
+                  <Dialog.Description />
                   <Tabs.Root
                     className="flex flex-col gap-12"
                     defaultValue="auth"
@@ -35,13 +36,13 @@ export const Header = () => {
                         className="font-medium text-white/60 text-xl dialog-tabs-trigger"
                         value="auth"
                       >
-                        Вход
+                        <Dialog.Title>Вход</Dialog.Title>
                       </Tabs.Trigger>
                       <Tabs.Trigger
                         className="font-medium text-white/60 text-xl dialog-tabs-trigger"
                         value="reg"
                       >
-                        Регистрация
+                        <Dialog.Title>Регистрация</Dialog.Title>
                       </Tabs.Trigger>
                     </Tabs.List>
                     <Tabs.Content value="auth">

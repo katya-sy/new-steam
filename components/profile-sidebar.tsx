@@ -86,9 +86,10 @@ export const ProfileSidebar = () => {
               <Dialog.Portal>
                 <Dialog.Overlay className="absolute inset-0 bg-black/70" />
                 <Dialog.Content className="top-1/2 left-1/2 fixed flex flex-col gap-12 bg-bg p-5 rounded-lg w-[calc(100%-32px)] sm:w-[500px] -translate-x-1/2 -translate-y-1/2">
-                  <h3 className="font-medium text-2xl text-white">
+                  <Dialog.Title className="font-medium text-2xl text-white">
                     Добавление игры
-                  </h3>
+                  </Dialog.Title>
+                  <Dialog.Description />
                   <AddGameForm />
                   <Dialog.Close className="top-2 right-2 absolute">
                     <Close />
