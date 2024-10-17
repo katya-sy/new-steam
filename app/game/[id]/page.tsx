@@ -47,7 +47,7 @@ export default function Game() {
           <h4 className="font-medium text-2xl">Обзор</h4>
           <iframe
             className="min-h-60 md:min-h-[500px] xs:min-h-80"
-            src="https://www.youtube.com/watch?v=jfKfPfyJRdk"
+            src="https://www.youtube.com/embed/jfKfPfyJRdk"
           />
         </div>
         <div id="comments" className="flex flex-col gap-5">
