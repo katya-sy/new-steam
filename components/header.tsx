@@ -24,7 +24,7 @@ export const Header = () => {
                 Войти
               </Dialog.Trigger>
               <Dialog.Portal>
-                <Dialog.Overlay className="absolute inset-0 bg-black/70" />
+                <Dialog.Overlay className="absolute inset-0 bg-black/70 w-screen" />
                 <Dialog.Content className="top-1/2 left-1/2 fixed bg-bg p-5 rounded-lg w-[calc(100%-32px)] sm:w-[500px] -translate-x-1/2 -translate-y-1/2">
                   <Dialog.Description />
                   <Tabs.Root

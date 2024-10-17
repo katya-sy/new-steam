@@ -66,12 +66,12 @@ export const ProfileSidebar = () => {
           Играю <span className="text-sm">45</span>
         </Tabs.Trigger>
         <Tabs.Trigger
-          className="flex justify-center items-center gap-3 p-2 border border-blue md:w-full font-medium tabs-trigger"
+          className="flex justify-center items-center gap-3 max-md:mr-3 p-2 border border-blue md:w-full font-medium tabs-trigger"
           value="finish"
         >
           Поиграл <span className="text-sm">23</span>
         </Tabs.Trigger>
-        <div className="flex items-center gap-3 md:gap-5 md:mt-7 max-md:ml-3">
+        <div className="flex items-center gap-3 md:gap-5 md:mt-7">
           <Tabs.Trigger
             className="flex justify-center items-center gap-3 p-2 border border-blue md:w-full font-medium tabs-trigger"
             value="add"
@@ -84,7 +84,7 @@ export const ProfileSidebar = () => {
                 <Plus />
               </Dialog.Trigger>
               <Dialog.Portal>
-                <Dialog.Overlay className="absolute inset-0 bg-black/70" />
+                <Dialog.Overlay className="absolute inset-0 bg-black/70 w-screen" />
                 <Dialog.Content className="top-1/2 left-1/2 fixed flex flex-col gap-12 bg-bg p-5 rounded-lg w-[calc(100%-32px)] sm:w-[500px] -translate-x-1/2 -translate-y-1/2">
                   <Dialog.Title className="font-medium text-2xl text-white">
                     Добавление игры
