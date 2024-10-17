@@ -48,6 +48,7 @@ export default function Game() {
           <iframe
             className="min-h-60 md:min-h-[500px] xs:min-h-80"
             src="https://www.youtube.com/embed/jfKfPfyJRdk"
+            allowFullScreen
           />
         </div>
         <div id="comments" className="flex flex-col gap-5">
