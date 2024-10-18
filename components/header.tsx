@@ -2,10 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { Input } from "./ui/input";
 import * as Dialog from "@radix-ui/react-dialog";
-import { Close } from "./shared/close";
 import * as Tabs from "@radix-ui/react-tabs";
 import { AuthForm } from "./auth-form";
 import { RegForm } from "./reg-form";
+import { DialogPortal } from "./ui/dialog-portal";
 
 export const Header = () => {
   return (
@@ -23,40 +23,30 @@ export const Header = () => {
               <Dialog.Trigger className="font-medium text-blue">
                 Войти
               </Dialog.Trigger>
-              <Dialog.Portal>
-                <Dialog.Overlay className="absolute inset-0 bg-black/70 w-screen" />
-                <Dialog.Content className="top-1/2 left-1/2 fixed bg-bg p-5 rounded-lg w-[calc(100%-32px)] sm:w-[500px] -translate-x-1/2 -translate-y-1/2">
-                  <Dialog.Description />
-                  <Tabs.Root
-                    className="flex flex-col gap-12"
-                    defaultValue="auth"
-                  >
-                    <Tabs.List className="flex items-baseline gap-10">
-                      <Tabs.Trigger
-                        className="font-medium text-white/60 text-xl dialog-tabs-trigger"
-                        value="auth"
-                      >
-                        <Dialog.Title>Вход</Dialog.Title>
-                      </Tabs.Trigger>
-                      <Tabs.Trigger
-                        className="font-medium text-white/60 text-xl dialog-tabs-trigger"
-                        value="reg"
-                      >
-                        <Dialog.Title>Регистрация</Dialog.Title>
-                      </Tabs.Trigger>
-                    </Tabs.List>
-                    <Tabs.Content value="auth">
-                      <AuthForm />
-                    </Tabs.Content>
-                    <Tabs.Content value="reg">
-                      <RegForm />
-                    </Tabs.Content>
-                  </Tabs.Root>
-                  <Dialog.Close className="top-2 right-2 absolute">
-                    <Close />
-                  </Dialog.Close>
-                </Dialog.Content>
-              </Dialog.Portal>
+              <DialogPortal>
+                <Tabs.Root className="flex flex-col gap-12" defaultValue="auth">
+                  <Tabs.List className="flex items-baseline gap-10">
+                    <Tabs.Trigger
+                      className="font-medium text-white/60 text-xl dialog-tabs-trigger"
+                      value="auth"
+                    >
+                      <Dialog.Title>Вход</Dialog.Title>
+                    </Tabs.Trigger>
+                    <Tabs.Trigger
+                      className="font-medium text-white/60 text-xl dialog-tabs-trigger"
+                      value="reg"
+                    >
+                      <Dialog.Title>Регистрация</Dialog.Title>
+                    </Tabs.Trigger>
+                  </Tabs.List>
+                  <Tabs.Content value="auth">
+                    <AuthForm />
+                  </Tabs.Content>
+                  <Tabs.Content value="reg">
+                    <RegForm />
+                  </Tabs.Content>
+                </Tabs.Root>
+              </DialogPortal>
             </Dialog.Root>
           </div>
         </div>

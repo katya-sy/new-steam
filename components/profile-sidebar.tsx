@@ -4,9 +4,9 @@ import { Edit } from "./shared/edit";
 import * as Tabs from "@radix-ui/react-tabs";
 import { Plus } from "./shared/plus";
 import { FavoriteList } from "./favorite-list";
-import { Close } from "./shared/close";
 import * as Dialog from "@radix-ui/react-dialog";
 import { AddGameForm } from "./add-game-form";
+import { DialogPortal } from "./ui/dialog-portal";
 
 export const ProfileSidebar = () => {
   const isCurrentUser = true;
@@ -83,21 +83,14 @@ export const ProfileSidebar = () => {
               <Dialog.Trigger className="font-medium text-blue">
                 <Plus />
               </Dialog.Trigger>
-              <Dialog.Portal>
-                <Dialog.Overlay className="absolute inset-0 bg-black/70 w-screen" />
-                <Dialog.Content className="top-1/2 left-1/2 fixed bg-bg p-5 rounded-lg w-[calc(100%-32px)] sm:w-[500px] -translate-x-1/2 -translate-y-1/2">
-                  <Dialog.Description />
-                  <div className="flex flex-col gap-12">
-                    <Dialog.Title className="font-medium text-2xl text-white">
-                      Добавление игры
-                    </Dialog.Title>
-                    <AddGameForm />
-                  </div>
-                  <Dialog.Close className="top-2 right-2 absolute">
-                    <Close />
-                  </Dialog.Close>
-                </Dialog.Content>
-              </Dialog.Portal>
+              <DialogPortal>
+                <div className="flex flex-col gap-12">
+                  <Dialog.Title className="font-medium text-2xl text-white">
+                    Добавление игры
+                  </Dialog.Title>
+                  <AddGameForm />
+                </div>
+              </DialogPortal>
             </Dialog.Root>
           )}
         </div>
