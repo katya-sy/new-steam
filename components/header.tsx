@@ -1,3 +1,4 @@
+'use client'
 import Image from "next/image";
 import Link from "next/link";
 import { Input } from "./ui/input";
@@ -6,8 +7,11 @@ import * as Tabs from "@radix-ui/react-tabs";
 import { AuthForm } from "./auth-form";
 import { RegForm } from "./reg-form";
 import { DialogPortal } from "./ui/dialog-portal";
+import {useState} from "react";
 
 export const Header = () => {
+  const [open, setOpen] = useState(false);
+
   return (
     <header className="border-b-2 border-blue">
       <div className="flex flex-wrap justify-between items-center gap-x-10 gap-y-4 py-7 container">
@@ -19,7 +23,7 @@ export const Header = () => {
             <Link className="font-medium text-blue" href="/user">
               Личный кабинет
             </Link>
-            <Dialog.Root>
+            <Dialog.Root open={open} onOpenChange={setOpen}>
               <Dialog.Trigger className="font-medium text-blue">
                 Войти
               </Dialog.Trigger>
@@ -40,7 +44,7 @@ export const Header = () => {
                     </Tabs.Trigger>
                   </Tabs.List>
                   <Tabs.Content value="auth">
-                    <AuthForm />
+                    <AuthForm setOpen={setOpen} />
                   </Tabs.Content>
                   <Tabs.Content value="reg">
                     <RegForm />
