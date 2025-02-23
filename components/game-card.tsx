@@ -7,9 +7,9 @@ import { BASE_URL } from "@/lib/consts";
 
 export const GameCard = ({ game }: { game: Game }) => {
   return (
-    <div className="relative flex flex-col gap-5 justify-between">
+    <div className="relative flex flex-col justify-between gap-5">
       <div className="flex flex-col gap-5">
-        <div className="flex justify-center items-center bg-black/10 w-full overflow-hidden aspect-square">
+        <div className="flex justify-center items-center bg-black/10 w-full aspect-square overflow-hidden">
           <Image
             src={`${BASE_URL}${
               game?.pictures.find((pic) => pic.cover)?.picture ||
@@ -22,10 +22,8 @@ export const GameCard = ({ game }: { game: Game }) => {
             className="object-cover"
           />
         </div>
-        <div className="flex items-start gap-3 max-w-full justify-between">
-          <h3 className="text-xl md:text-2xl flex-shrink break-all">
-            {game?.name}
-          </h3>
+        <div className="flex justify-between items-start gap-3 max-w-full">
+          <h3 className="flex-shrink text-xl md:text-2xl">{game?.name}</h3>
           <Rating rating={game?.rating} />
         </div>
       </div>
@@ -33,7 +31,7 @@ export const GameCard = ({ game }: { game: Game }) => {
         <div className="flex flex-col gap-3">
           <Link
             href={`/game/${game?.id}`}
-            className="bg-blue px-5 py-2 w-full text-base text-bg text-center md:text-xl"
+            className="bg-blue px-5 py-2 w-full text-bg text-base md:text-xl text-center"
           >
             Подробнее
           </Link>
