@@ -78,7 +78,7 @@ export const Header = () => {
                       <AuthForm setOpen={setOpen} />
                     </Tabs.Content>
                     <Tabs.Content value="reg">
-                      <RegForm />
+                      <RegForm setOpen={setOpen} />
                     </Tabs.Content>
                   </Tabs.Root>
                 </DialogPortal>

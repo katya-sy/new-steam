@@ -52,7 +52,7 @@ export const AuthForm = ({
       await setCookie("token", String(data?.key));
 
       const profileRes = await getProfile();
-      toast(`Успешно вошли как ${profileRes.data?.user.username}`);
+      toast(`Вы успешно вошли как ${profileRes.data?.user.username}`);
       setProfile(profileRes.data);
 
       setOpen(false);
