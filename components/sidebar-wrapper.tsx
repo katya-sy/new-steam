@@ -1,9 +1,16 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FilterSidebar } from "./filter-sidebar";
+import { Tag } from "@/types/game-type";
+import { useTagStore } from "@/store/tag-store";
 
-export const SidebarWrapper = () => {
+export const SidebarWrapper = ({ data }: { data: Tag[] | null }) => {
+  const setTags = useTagStore((state) => state.setTags);
   const [open, setOpen] = useState(window.innerWidth > 768);
+
+  useEffect(() => {
+    setTags(data || []);
+  }, [data]);
 
   return (
     <div>

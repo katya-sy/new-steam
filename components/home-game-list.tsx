@@ -5,6 +5,7 @@ import { GameCard } from "./game-card";
 import { Game } from "@/types/game-type";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "@/lib/consts";
+import { useGameStore } from "@/store/game-store";
 
 const getNew = (a: Game, b: Game) => (a["date"] < b["date"] ? 1 : -1);
 
@@ -28,10 +29,12 @@ const getRecommend = (a: Game, b: Game) => {
 };
 
 export const HomeGameList = ({ data }: { data: Game[] }) => {
+  const setGames = useGameStore((state) => state.setGames);
   const [recGames, setRecGames] = useState<Game[]>([]);
   const [newGames, setNewGames] = useState<Game[]>([]);
 
   useEffect(() => {
+    setGames(data);
     setRecGames(
       [...data]
         .filter((g) => g.profile.is_verify)
@@ -45,7 +48,7 @@ export const HomeGameList = ({ data }: { data: Game[] }) => {
     <div className="flex flex-col gap-10">
       {recGames && (
         <Link
-          href={`/game/${recGames[0].id}`}
+          href={`/game/${recGames[0]?.id}`}
           className="relative flex w-full max-h-[500px] overflow-hidden"
         >
           <Image

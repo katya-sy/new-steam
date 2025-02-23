@@ -22,8 +22,10 @@ export const GameCard = ({ game }: { game: Game }) => {
             className="object-cover"
           />
         </div>
-        <div className="flex items-start gap-3 justify-between">
-          <h3 className="text-xl md:text-2xl">{game?.name}</h3>
+        <div className="flex items-start gap-3 max-w-full justify-between">
+          <h3 className="text-xl md:text-2xl flex-shrink break-all">
+            {game?.name}
+          </h3>
           <Rating rating={game?.rating} />
         </div>
       </div>
