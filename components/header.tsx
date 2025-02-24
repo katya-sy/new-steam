@@ -44,7 +44,7 @@ export const Header = () => {
           <div className="flex items-center gap-5">
             {profile ? (
               <>
-                <Link className="font-medium text-blue" href="/user">
+                <Link className="font-medium text-blue" href="/profile">
                   Личный кабинет
                 </Link>
                 <button

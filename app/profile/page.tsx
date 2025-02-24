@@ -4,7 +4,7 @@ import { ProfileSidebar } from "@/components/profile-sidebar";
 import { UserGameTabs } from "@/components/user-game-tabs";
 import * as Tabs from "@radix-ui/react-tabs";
 
-export default async function User() {
+export default async function Profile() {
   const { data } = await getProfile();
 
   return (

@@ -17,20 +17,23 @@ export const FavoriteList = ({ favorites, title, favBy }: Props) => {
       {favorites.length > 0 ? (
         favorites.map((fav) => (
           <div key={fav.id} className="flex justify-between items-center">
-            <Link href="" className="flex items-center gap-3">
+            <Link
+              href={`/user/${favBy ? fav.user.id : fav.favorite_user_details.id}`}
+              className="flex items-center gap-3"
+            >
               <div className="flex justify-center items-center rounded-full aspect-square overflow-hidden">
                 <Image
                   src={`${BASE_URL}${
                     favBy
-                      ? fav?.user_pictures[0].picture ||
-                        "/placeholder/placeholder.jpg"
-                      : fav?.favorite_user_pictures[0].picture ||
-                        "/placeholder/placeholder.jpg"
+                      ? fav?.user_pictures[0]?.picture ||
+                        "/media/placeholder/avatar.jpg"
+                      : fav?.favorite_user_pictures[0]?.picture ||
+                        "/media/placeholder/avatar.jpg"
                   }`}
                   className="object-cover"
                   width={40}
                   height={40}
-                  alt="User"
+                  alt={`${favBy ? fav.user.username : fav.favorite_user_details.username}`}
                 />
               </div>
               <p className="font-medium text-blue">
