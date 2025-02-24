@@ -54,7 +54,7 @@ export const ProfileSidebar = ({ profile }: { profile: Profile | null }) => {
         <div className="flex justify-center items-center w-full aspect-square overflow-hidden">
           <Image
             src={`${BASE_URL}${
-              profile?.pictures[0]?.picture || "/placeholder/placeholder.jpg"
+              profile?.pictures[0]?.picture || "/media/placeholder/avatar.jpg"
             }`}
             className="object-cover"
             width={400}

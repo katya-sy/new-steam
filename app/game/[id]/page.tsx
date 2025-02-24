@@ -25,9 +25,7 @@ export default async function Game({ params }: { params: { id: string } }) {
                   className="flex justify-center items-center bg-black/10 min-h-full overflow-hidden"
                 >
                   <Image
-                    src={`${BASE_URL}${
-                      pic?.picture
-                    }`}
+                    src={`${BASE_URL}${pic?.picture}`}
                     className="object-cover"
                     width={420}
                     height={495}
@@ -36,9 +34,7 @@ export default async function Game({ params }: { params: { id: string } }) {
                 </div>
               ))}
         </div>
-        <p>
-          {data?.description}
-        </p>
+        <p>{data?.description}</p>
         <div id="review" className="flex flex-col gap-5">
           <h4 className="font-medium text-2xl">Обзор</h4>
           <iframe
@@ -50,27 +46,9 @@ export default async function Game({ params }: { params: { id: string } }) {
         <div id="comments" className="flex flex-col gap-5">
           <h4 className="font-medium text-2xl">Обсуждение</h4>
           <div className="flex flex-col gap-3 -ml-5">
-            <Comment />
-            <div className="flex flex-col gap-3 ml-5 md:ml-12 border-l border-l-blue md:border-l-2">
-              <Comment />
-              <Comment />
-              <div className="flex flex-col gap-3 ml-5 md:ml-12 border-l border-l-blue md:border-l-2">
-                <Comment />
-                <div className="flex flex-col gap-3 ml-5 md:ml-12 border-l border-l-blue md:border-l-2">
-                  <Comment />
-                  <Comment />
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col gap-3 ml-5 md:ml-12 border-l border-l-blue md:border-l-2">
-              <Comment />
-              <div className="flex flex-col gap-3 ml-5 md:ml-12 border-l border-l-blue md:border-l-2">
-                <Comment />
-                <div className="flex flex-col gap-3 ml-5 md:ml-12 border-l border-l-blue md:border-l-2">
-                  <Comment />
-                </div>
-              </div>
-            </div>
+            {data?.comments.map((comment) => (
+                <Comment comment={comment} key={comment.id} />
+            ))}
           </div>
         </div>
       </div>
