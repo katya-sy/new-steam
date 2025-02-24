@@ -11,7 +11,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-import { createComment } from "@/api/comment-api";
+import { createComment, replyComment } from "@/api/comment-api";
 import { toast } from "sonner";
 import { ErrorToast } from "@/components/error-toast";
 import { useGameStore } from "@/store/game-store";
@@ -20,11 +20,12 @@ const formSchema = z.object({
   text: z.string().min(1, "Обязательное поле"),
 });
 
-export const CreateCommentForm = ({
-  gameId,
-}: {
+interface Props {
   gameId: number | undefined;
-}) => {
+  repliedCommentId?: number;
+}
+
+export const CreateCommentForm = ({ gameId, repliedCommentId }: Props) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -41,8 +42,32 @@ export const CreateCommentForm = ({
         text: values.text,
       });
       if (success) {
-        form.reset();
         const currentGame = getGame(gameId);
+        form.reset();
+        if (repliedCommentId && data) {
+          const replyRes = await replyComment({
+            comment: data?.id,
+            replied_comment: repliedCommentId,
+          });
+
+          if (replyRes.success) {
+            if (currentGame?.comments && data)
+              updateGame(gameId, {
+                ...currentGame,
+                comments: currentGame.comments.map((comment) =>
+                  comment.id === repliedCommentId
+                    ? {
+                        ...comment,
+                        replies: [...comment?.replies, data],
+                      }
+                    : comment
+                ),
+              });
+          } else {
+            toast(<ErrorToast error={replyRes?.error} />);
+          }
+        }
+
         if (currentGame?.comments && data)
           updateGame(gameId, {
             ...currentGame,

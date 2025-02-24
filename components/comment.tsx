@@ -55,7 +55,10 @@ export const Comment = ({ comment }: { comment: CommentType }) => {
       </div>
       {answer && (
         <div className="ml-5">
-          <CreateCommentForm gameId={comment?.game} />
+          <CreateCommentForm
+            repliedCommentId={comment?.id}
+            gameId={comment?.game}
+          />
         </div>
       )}
       {comment?.replies.length > 0 && (
