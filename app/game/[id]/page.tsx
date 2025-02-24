@@ -1,6 +1,7 @@
 import { getGameById } from "@/api/game-api";
 import { Comment } from "@/components/comment";
 import { GameMainInfo } from "@/components/game-main-info";
+import { CreateCommentForm } from "@/components/create-comment-form";
 import { Header } from "@/components/header";
 import { BASE_URL } from "@/lib/consts";
 import Image from "next/image";
@@ -45,9 +46,10 @@ export default async function Game({ params }: { params: { id: string } }) {
         </div>
         <div id="comments" className="flex flex-col gap-5">
           <h4 className="font-medium text-2xl">Обсуждение</h4>
+          <CreateCommentForm gameId={data?.id} />
           <div className="flex flex-col gap-3 -ml-5">
             {data?.comments.map((comment) => (
-                <Comment comment={comment} key={comment.id} />
+              <Comment comment={comment} key={comment.id} />
             ))}
           </div>
         </div>
