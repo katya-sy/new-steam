@@ -12,10 +12,10 @@ export const GameMainInfo = ({ game }: { game: Game | null }) => {
       <div className="flex justify-center items-center bg-black/10 min-h-full overflow-hidden">
         <Image
           src={`${BASE_URL}${
-              game?.pictures.find((pic) => pic.cover)?.picture ||
-              game?.pictures[0]?.picture ||
-              "/media/placeholder/placeholder.png"
-            }`}
+            game?.pictures.find((pic) => pic.cover)?.picture ||
+            game?.pictures[0]?.picture ||
+            "/media/placeholder/placeholder.png"
+          }`}
           className="object-cover"
           width={420}
           height={495}
@@ -51,9 +51,8 @@ export const GameMainInfo = ({ game }: { game: Game | null }) => {
               </div>
             </div>
             <div className="flex items-center gap-1 font-medium">
-              <p className="text-white/60">Официальный сайт:</p>
-              <a className="text-blue" href={game?.resource} target="_blank">
-                {game?.resource}
+              <a className="text-blue underline" href={game?.resource} target="_blank">
+                Официальный сайт
               </a>
             </div>
           </div>
