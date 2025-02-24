@@ -14,11 +14,10 @@ export const Comment = ({ comment }: { comment: CommentType }) => {
             <div className="flex items-center gap-3">
               <div className="flex flex-shrink-0 justify-center items-center rounded-full aspect-square overflow-hidden">
                 <Image
-                  // src={`${BASE_URL}${
-                  //   comment.user?.pictures[0]?.picture ||
-                  //   "/media/placeholder/avatar.jpg"
-                  // }`}
-                  src="/avatar.png"
+                  src={`${BASE_URL}${
+                    comment.profile?.pictures[0]?.picture ||
+                    "/media/placeholder/avatar.jpg"
+                  }`}
                   className="object-cover"
                   width={40}
                   height={40}
