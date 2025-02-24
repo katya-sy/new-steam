@@ -1,14 +1,23 @@
 import Image from "next/image";
 import { Delete } from "./shared/delete";
 import Link from "next/link";
+import { Favorite } from "@/types/user-type";
 
-export const FavoriteList = () => {
+interface Props {
+  favorites: Favorite[] | [];
+  title: string;
+  favBy?: boolean;
+}
+
+export const FavoriteList = ({ favorites, title, favBy }: Props) => {
   return (
     <div className="flex flex-col gap-5 max-md:row-start-2">
-      {[1, 2, 3, 4, 5, 6].map((item) => (
-        <div key={item} className="flex justify-between items-center">
-          <Link href="" className="flex items-center gap-3">
-            <div className="flex justify-center items-center rounded-full overflow-hidden aspect-square">
+      <h3 className="text-lg">{title}</h3>
+      {favorites.length > 0 ? (
+        favorites.map((fav) => (
+          <div key={fav.id} className="flex justify-between items-center">
+            <Link href="" className="flex items-center gap-3">
+              {/* <div className="flex justify-center items-center rounded-full aspect-square overflow-hidden">
               <Image
                 src="/avatar.png"
                 className="object-cover"
@@ -16,14 +25,23 @@ export const FavoriteList = () => {
                 height={40}
                 alt="User"
               />
-            </div>
-            <p className="font-medium text-blue">Fav Username</p>
-          </Link>
-          <button className="text-blue">
-            <Delete />
-          </button>
-        </div>
-      ))}
+            </div> */}
+              <p className="font-medium text-blue">
+                {favBy ? fav.user.username : fav.favorite_user_details.username}
+              </p>
+            </Link>
+            {!favBy && (
+              <button className="text-blue">
+                <Delete />
+              </button>
+            )}
+          </div>
+        ))
+      ) : (
+        <p className="text-white/60 text-sm">
+          {favBy ? "На Вас еще никто не подписался" : "У Вас еще нет подписок"}
+        </p>
+      )}
     </div>
   );
 };

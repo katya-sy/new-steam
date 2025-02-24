@@ -93,7 +93,12 @@ export const ProfileSidebar = ({ profile }: { profile: Profile | null }) => {
           </Dialog.Root>
         </div>
       </Tabs.List>
-      <FavoriteList />
+      <FavoriteList title="Мои подписки" favorites={profile?.favorites || []} />
+      <FavoriteList
+        title="Мои подписчики"
+        favorites={profile?.favorited_by || []}
+        favBy
+      />
     </div>
   );
 };
