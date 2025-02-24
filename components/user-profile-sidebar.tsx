@@ -8,6 +8,7 @@ import { BASE_URL } from "@/lib/consts";
 import { dateFormatter } from "@/lib/date-formatter";
 import { Button } from "./ui/button";
 import { useUserStore } from "@/store/user-store";
+import { useRouter } from "next/navigation";
 
 export const UserProfileSidebar = ({
   profile,
@@ -15,6 +16,9 @@ export const UserProfileSidebar = ({
   profile: Profile | null;
 }) => {
   const authProfile = useUserStore((state) => state.profile);
+  const router = useRouter();
+
+  if (profile?.id === authProfile?.id) router.push("/profile");
 
   return (
     <div className="flex flex-col gap-10 max-md:grid max-md:grid-rows-[auto,auto,auto] py-12 pr-5">
