@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import { Edit } from "./shared/edit";
 import * as Tabs from "@radix-ui/react-tabs";
@@ -9,8 +10,44 @@ import { DialogPortal } from "./ui/dialog-portal";
 import { Profile } from "@/types/user-type";
 import { BASE_URL } from "@/lib/consts";
 import { dateFormatter } from "./../lib/date-formatter";
+import { createVerificationRequest } from "@/api/verification-api";
+import { toast } from "sonner";
+import { useEffect, useState } from "react";
+import { ErrorToast } from "./error-toast";
+import { setCookie, getCookie } from "@/lib/cookie";
 
 export const ProfileSidebar = ({ profile }: { profile: Profile | null }) => {
+  const canVerify = async () => {
+    const date = await getCookie("verification-date");
+    if (date) {
+      const verificationDate = new Date(date.value).getDate();
+      const currentDate = new Date().getDate();
+      const timeDifference = currentDate - verificationDate;
+      const daysDifference = timeDifference / (1000 * 60 * 60 * 24);
+      return daysDifference > 5;
+    }
+    return true;
+  };
+  const [disabledVerify, setDisabledVerify] = useState(false);
+
+  useEffect(() => {
+    canVerify().then((data) => setDisabledVerify(data));
+  }, []);
+
+  const verificationHandler = async () => {
+    const { success, data, error } = await createVerificationRequest();
+    if (success) {
+      toast("Заявка на верификацию отправлена");
+      setDisabledVerify(true);
+      if (data) {
+        setCookie("verification-date", data?.date);
+      }
+    }
+    if (error) {
+      toast(<ErrorToast error={error} />);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-10 max-md:grid max-md:grid-rows-[auto,auto,auto] py-12 pr-5">
       <div className="md:flex md:flex-col gap-5 grid grid-cols-2 max-xs:grid-cols-1">
@@ -32,7 +69,11 @@ export const ProfileSidebar = ({ profile }: { profile: Profile | null }) => {
               {profile?.is_verify ? (
                 <p className="text-blue text-lg text-left leading-[95%]">✓</p>
               ) : (
-                <button className="text-blue text-xs text-left leading-[95%]">
+                <button
+                  disabled={disabledVerify}
+                  onClick={verificationHandler}
+                  className="text-blue disabled:text-white/60 text-xs text-left leading-[95%] disabled:event-none"
+                >
                   Получить галочку
                 </button>
               )}
