@@ -1,11 +1,16 @@
+"use client";
 import Image from "next/image";
 import { Rating } from "./rating";
 import { CommentType } from "@/types/comment-type";
 import { BASE_URL } from "@/lib/consts";
 import { datetimeFormatter } from "@/lib/date-formatter";
 import Link from "next/link";
+import { CreateCommentForm } from "./create-comment-form";
+import { useState } from "react";
 
 export const Comment = ({ comment }: { comment: CommentType }) => {
+  const [answer, setAnswer] = useState(false);
+
   return (
     <>
       <div className="flex flex-col gap-5 py-2 pl-5">
@@ -32,7 +37,12 @@ export const Comment = ({ comment }: { comment: CommentType }) => {
               </Link>
               <Rating />
             </div>
-            <button className="ml-auto text-white/60">Ответить</button>
+            <button
+              onClick={() => setAnswer(!answer)}
+              className="ml-auto text-white/60"
+            >
+              {answer ? "Отмена" : "Ответить"}
+            </button>
           </div>
           <div className="flex items-center gap-5 ml-auto">
             <p className="text-white/60 text-xs">
@@ -43,6 +53,11 @@ export const Comment = ({ comment }: { comment: CommentType }) => {
         </div>
         <p>{comment?.text}</p>
       </div>
+      {answer && (
+        <div className="ml-5">
+          <CreateCommentForm gameId={comment?.game} />
+        </div>
+      )}
       {comment?.replies.length > 0 && (
         <div className="flex flex-col gap-3 ml-5 md:ml-12 border-l border-l-blue md:border-l-2">
           {comment?.replies.map((comm) => (
