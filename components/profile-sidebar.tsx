@@ -24,9 +24,9 @@ export const ProfileSidebar = ({ profile }: { profile: Profile | null }) => {
       const currentDate = new Date().getDate();
       const timeDifference = currentDate - verificationDate;
       const daysDifference = timeDifference / (1000 * 60 * 60 * 24);
-      return daysDifference > 5;
+      return daysDifference < 5;
     }
-    return true;
+    return false;
   };
   const [disabledVerify, setDisabledVerify] = useState(false);
 
@@ -68,11 +68,16 @@ export const ProfileSidebar = ({ profile }: { profile: Profile | null }) => {
               <h4 className="font-medium text-lg">{profile?.user.username}</h4>
               {profile?.is_verify ? (
                 <p className="text-blue text-lg text-left leading-[95%]">✓</p>
+              ) : disabledVerify ? (
+                <p
+                  className="text-white/60 text-xs text-left leading-[95%]"
+                >
+                  Ожидание подтверждения...
+                </p>
               ) : (
                 <button
-                  disabled={disabledVerify}
                   onClick={verificationHandler}
-                  className="text-blue disabled:text-white/60 text-xs text-left leading-[95%] disabled:event-none"
+                  className="text-blue text-xs text-left leading-[95%]"
                 >
                   Получить галочку
                 </button>
