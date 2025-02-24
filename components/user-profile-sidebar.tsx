@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Rating } from "./rating";
 import { Edit } from "./shared/edit";
 import * as Tabs from "@radix-ui/react-tabs";
 import { Plus } from "./shared/plus";
@@ -7,49 +8,49 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { AddGameForm } from "./add-game-form";
 import { DialogPortal } from "./ui/dialog-portal";
 import { Profile } from "@/types/user-type";
-import { BASE_URL } from "@/lib/consts";
-import { dateFormatter } from "./../lib/date-formatter";
 
-export const ProfileSidebar = ({ profile }: { profile: Profile | null }) => {
+export const ProfileSidebar = ({ profile }: { profile: Profile }) => {
+  const isCurrentUser = true;
+
   return (
     <div className="flex flex-col gap-10 max-md:grid max-md:grid-rows-[auto,auto,auto] py-12 pr-5">
       <div className="md:flex md:flex-col gap-5 grid grid-cols-2 max-xs:grid-cols-1">
         <div className="flex justify-center items-center w-full aspect-square overflow-hidden">
           <Image
-            src={`${BASE_URL}${
-              profile?.pictures[0]?.picture || "/placeholder/placeholder.jpg"
-            }`}
+            src="/avatar.png"
             className="object-cover"
             width={400}
             height={400}
-            alt={`${profile?.user.username}`}
+            alt="User"
           />
         </div>
         <div className="flex flex-col gap-5">
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-3">
-              <h4 className="font-medium text-lg">{profile?.user.username}</h4>
-              {profile?.is_verify ? (
-                <p className="text-blue text-lg text-left leading-[95%]">✓</p>
-              ) : (
+              <h4 className="font-medium text-lg">Username</h4>
+              {isCurrentUser && (
                 <button className="text-blue text-xs text-left leading-[95%]">
                   Получить галочку
                 </button>
               )}
             </div>
             <div className="flex flex-col gap-1 text-white/60 text-sm">
-              <a href="mailto:username@gmail.com">{profile?.user.email}</a>
-              <p>{dateFormatter(profile?.birth_date)}</p>
+              {isCurrentUser && (
+                <a href="mailto:username@gmail.com">username@gmail.com</a>
+              )}
+              <p>1 января 2000</p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-5">
             <p className="font-medium">Уровень</p>
-            <span className="font-medium md:text-lg">{profile?.rating}</span>
+            <Rating />
           </div>
-          <button className="flex items-center gap-1 text-blue">
-            <Edit />
-            <span className="text-sm">Редактировать профиль</span>
-          </button>
+          {isCurrentUser && (
+            <button className="flex items-center gap-1 text-blue">
+              <Edit />
+              <span className="text-sm">Редактировать профиль</span>
+            </button>
+          )}
         </div>
       </div>
       <Tabs.List className="flex md:flex-col max-md:flex-wrap gap-3 max-md:row-start-3">
@@ -78,22 +79,27 @@ export const ProfileSidebar = ({ profile }: { profile: Profile | null }) => {
           >
             Добавил <span className="text-sm">3</span>
           </Tabs.Trigger>
-          <Dialog.Root>
-            <Dialog.Trigger className="font-medium text-blue">
-              <Plus />
-            </Dialog.Trigger>
-            <DialogPortal>
-              <div className="flex flex-col gap-12">
-                <Dialog.Title className="font-medium text-white text-2xl">
-                  Добавление игры
-                </Dialog.Title>
-                <AddGameForm />
-              </div>
-            </DialogPortal>
-          </Dialog.Root>
+          {isCurrentUser && (
+            <Dialog.Root>
+              <Dialog.Trigger className="font-medium text-blue">
+                <Plus />
+              </Dialog.Trigger>
+              <DialogPortal>
+                <div className="flex flex-col gap-12">
+                  <Dialog.Title className="font-medium text-white text-2xl">
+                    Добавление игры
+                  </Dialog.Title>
+                  <AddGameForm />
+                </div>
+              </DialogPortal>
+            </Dialog.Root>
+          )}
         </div>
       </Tabs.List>
       <FavoriteList />
     </div>
   );
 };
+Rating, Edit, Plus, FavoriteList, AddGameForm, DialogPortal, Profile, import * as Dialog from "@radix-ui/react-dialog";
+import * as Tabs from "@radix-ui/react-tabs";
+import Image from "next/image";

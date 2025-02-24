@@ -13,9 +13,11 @@ import { toast } from "sonner";
 import { ErrorToast } from "@/components/error-toast";
 import { deleteCookie } from "@/lib/cookie";
 import { logout } from "@/api/user-api";
+import { useRouter } from "next/navigation";
 
 export const Header = () => {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
   const profile = useUserStore((state) => state.profile);
   const setProfile = useUserStore((state) => state.setProfile);
 
@@ -25,6 +27,8 @@ export const Header = () => {
       toast(`${data?.detail}`);
       await deleteCookie("token");
       setProfile(null);
+
+      router.push("/");
     } else {
       toast(<ErrorToast error={error} />);
     }
