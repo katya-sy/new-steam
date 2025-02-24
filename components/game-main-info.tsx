@@ -1,47 +1,59 @@
 import { GameListSelect } from "@/components/game-list-select";
 import { Rating } from "@/components/rating";
+import { Game } from "@/types/game-type";
 import Image from "next/image";
 import Link from "next/link";
+import { dateFormatter } from "@/lib/date-formatter";
+import { BASE_URL } from "@/lib/consts";
 
-export const GameMainInfo = () => {
+export const GameMainInfo = ({ game }: { game: Game | null }) => {
   return (
     <div className="flex max-md:flex-col gap-10 lg:gap-32">
       <div className="flex justify-center items-center bg-black/10 min-h-full overflow-hidden">
         <Image
-          src="/game-img.jpeg"
+          src={`${BASE_URL}${
+              game?.pictures.find((pic) => pic.cover)?.picture ||
+              game?.pictures[0]?.picture ||
+              "/media/placeholder/placeholder.png"
+            }`}
           className="object-cover"
           width={420}
           height={495}
-          alt="Game"
+          alt={`${game?.name}` || "game"}
         />
       </div>
       <div className="flex flex-col gap-5 md:gap-5">
         <div className="flex flex-col gap-5">
           <div className="relative flex max-lg:flex-wrap items-center gap-x-10 gap-y-2">
-            <h1 className="font-medium text-3xl lg:text-4xl">Дота 100</h1>
+            <h1 className="font-medium text-3xl lg:text-4xl">{game?.name}</h1>
             <Rating />
-            <div className="border-[#00FF00] bg-bg/90 px-1 border text-xl">
-              Вышла
+            <div
+              className={`bg-bg/90 px-1 border ${game?.status.play ? "border-green-500" : "border-amber-500"} text-xl`}
+            >
+              {game?.status.name}
             </div>
           </div>
           <div className="flex items-center gap-5">
-            <div className="px-2 py-1 border border-blue">Фэнтези</div>
-            <div className="px-2 py-1 border border-blue">Хоррор</div>
+            {game?.tags.map((tag) => (
+              <div key={tag?.id} className="px-2 py-1 border border-blue">
+                {tag?.name}
+              </div>
+            ))}
           </div>
           <div className="flex flex-col gap-3">
             <div className="flex flex-wrap items-center gap-x-10 gap-y-1">
               <p className="font-medium text-white/60">
-                Добавлена 2 октября 2024
+                Добавлена {dateFormatter(game?.date)}
               </p>
               <div className="flex items-center gap-3">
-                <p className="font-medium">AddUsername</p>
-                <Rating />
+                <p className="font-medium">{game?.user.username}</p>
+                <Rating rating={game?.profile.rating} />
               </div>
             </div>
             <div className="flex items-center gap-1 font-medium">
               <p className="text-white/60">Официальный сайт:</p>
-              <a className="text-blue" href="" target="_blank">
-                http://site.com
+              <a className="text-blue" href={game?.resource} target="_blank">
+                {game?.resource}
               </a>
             </div>
           </div>

@@ -14,7 +14,7 @@ export const GameCard = ({ game }: { game: Game }) => {
             src={`${BASE_URL}${
               game?.pictures.find((pic) => pic.cover)?.picture ||
               game?.pictures[0]?.picture ||
-              "/placeholder/placeholder.jpg"
+              "/media/placeholder/placeholder.png"
             }`}
             alt={game?.name}
             width={400}

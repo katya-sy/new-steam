@@ -1,14 +1,18 @@
+import { getGameById } from "@/api/game-api";
 import { Comment } from "@/components/comment";
 import { GameMainInfo } from "@/components/game-main-info";
 import { Header } from "@/components/header";
 import Image from "next/image";
 
-export default function Game() {
+export default async function Game({ params }: { params: { id: string } }) {
+  const { id } = params;
+  const { data } = await getGameById(Number(id));
+
   return (
     <div>
       <Header />
       <div className="flex flex-col gap-10 my-12 container">
-        <GameMainInfo />
+        <GameMainInfo game={data} />
         <div className="gap-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
           {[1, 2, 3, 4, 5, 6].map((item) => (
             <div
@@ -46,7 +50,7 @@ export default function Game() {
         <div id="review" className="flex flex-col gap-5">
           <h4 className="font-medium text-2xl">Обзор</h4>
           <iframe
-            className="min-h-60 md:min-h-[500px] xs:min-h-80"
+            className="min-h-60 xs:min-h-80 md:min-h-[500px]"
             src="https://www.youtube.com/embed/jfKfPfyJRdk"
             allowFullScreen
           />

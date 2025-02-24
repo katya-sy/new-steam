@@ -6,3 +6,9 @@ export const getGames = async () => {
     method: "GET",
   });
 };
+
+export const getGameById = async (id: number) => {
+  return apiInstance<Game>(`/game/${id}`, {
+    method: "GET",
+  });
+};
