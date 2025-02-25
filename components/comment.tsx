@@ -11,6 +11,7 @@ import { useUserStore } from "@/store/user-store";
 import { deleteComment } from "@/api/comment-api";
 import { toast } from "sonner";
 import { ErrorToast } from "@/components/error-toast";
+import { UpdateCommentForm } from "./update-comment-form";
 
 interface Props {
   comment: CommentType;
@@ -21,6 +22,7 @@ interface Props {
 export const Comment = ({ comment, setComments, prevComments }: Props) => {
   const profile = useUserStore((state) => state.profile);
   const [answer, setAnswer] = useState(false);
+  const [update, setUpdate] = useState(false);
   const [deleted, setDeleted] = useState(false);
 
   useEffect(() => {
@@ -29,6 +31,7 @@ export const Comment = ({ comment, setComments, prevComments }: Props) => {
 
   useEffect(() => {
     setAnswer(false);
+    setUpdate(false);
   }, [prevComments]);
 
   const deleteHandler = async () => {
@@ -79,10 +82,10 @@ export const Comment = ({ comment, setComments, prevComments }: Props) => {
                 {profile?.id === comment?.profile.id && (
                   <>
                     <button
-                      onClick={() => setAnswer(!answer)}
+                      onClick={() => setUpdate(!update)}
                       className="ml-auto text-green-500/60"
                     >
-                      {answer ? "Отмена" : "Изменить"}
+                      {update ? "Отмена" : "Изменить"}
                     </button>
                     <button
                       onClick={deleteHandler}
@@ -136,6 +139,15 @@ export const Comment = ({ comment, setComments, prevComments }: Props) => {
             </div>
           </div>
           <p className="text-red-300/70">Комментарий был удален</p>
+        </div>
+      )}
+      {update && !deleted && (
+        <div className="ml-5">
+          <UpdateCommentForm
+            comment={comment}
+            setComments={setComments}
+            prevComments={prevComments}
+          />
         </div>
       )}
       {answer && !deleted && (
