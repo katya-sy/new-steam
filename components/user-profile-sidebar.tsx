@@ -89,12 +89,21 @@ export const UserProfileSidebar = ({
           </Tabs.Trigger>
         </div>
       </Tabs.List>
-      <FavoriteList title="Подписки" favorites={profile?.favorites || []} />
-      <FavoriteList
-        title="Подписчики"
-        favorites={profile?.favorited_by || []}
-        favBy
-      />
+      {profile && (
+        <>
+          <FavoriteList
+            title="Подписки"
+            user={profile}
+            favorites={profile?.favorites || []}
+          />
+          <FavoriteList
+            title="Подписчики"
+            user={profile}
+            favorites={profile?.favorited_by || []}
+            favBy
+          />
+        </>
+      )}
     </div>
   );
 };

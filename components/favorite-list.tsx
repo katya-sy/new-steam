@@ -1,16 +1,17 @@
 import Image from "next/image";
 import { Delete } from "./shared/delete";
 import Link from "next/link";
-import { Favorite } from "@/types/user-type";
+import { Favorite, Profile } from "@/types/user-type";
 import { BASE_URL } from "@/lib/consts";
 
 interface Props {
   favorites: Favorite[] | [];
   title: string;
   favBy?: boolean;
+  user?: Profile;
 }
 
-export const FavoriteList = ({ favorites, title, favBy }: Props) => {
+export const FavoriteList = ({ favorites, title, favBy, user }: Props) => {
   return (
     <div className="flex flex-col gap-5 max-md:row-start-2">
       <h3 className="text-lg">{title}</h3>
@@ -40,7 +41,7 @@ export const FavoriteList = ({ favorites, title, favBy }: Props) => {
                 {favBy ? fav.user.username : fav.favorite_user_details.username}
               </p>
             </Link>
-            {!favBy && (
+            {!favBy && !user && (
               <button className="text-blue">
                 <Delete />
               </button>
@@ -49,7 +50,13 @@ export const FavoriteList = ({ favorites, title, favBy }: Props) => {
         ))
       ) : (
         <p className="text-white/60 text-sm">
-          {favBy ? "На Вас еще никто не подписался" : "У Вас еще нет подписок"}
+          {favBy
+            ? user
+              ? `У ${user?.user.username} нет подписчиков`
+              : "На Вас еще никто не подписался"
+            : user
+              ? `У ${user?.user.username} нет подписок`
+              : "У Вас еще нет подписок"}
         </p>
       )}
     </div>
