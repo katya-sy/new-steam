@@ -9,5 +9,6 @@ export type CommentType = {
   date: string;
   current_play_time: number;
   rating: number;
+  deleted: boolean;
   replies: CommentType[];
 };

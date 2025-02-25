@@ -8,6 +8,20 @@ export const createComment = async (data: { game: number; text: string }) => {
   });
 };
 
+export const updateComment = async (data: { text: string }, id: number) => {
+  return apiInstance<CommentType>(`/comment/${id}`, {
+    method: "PATCH",
+    body: data,
+  });
+};
+
+export const deleteComment = async (id: number) => {
+  return apiInstance<CommentType>(`/comment/${id}`, {
+    method: "PATCH",
+    body: { deleted: true },
+  });
+};
+
 export const replyComment = async (data: {
   comment: number;
   replied_comment: number;
