@@ -9,6 +9,10 @@ import { dateFormatter } from "@/lib/date-formatter";
 import { Button } from "./ui/button";
 import { useUserStore } from "@/store/user-store";
 import { useRouter } from "next/navigation";
+import { createFavorite, deleteFavorite } from "@/api/favorite-api";
+import { toast } from "sonner";
+import { ErrorToast } from "@/components/error-toast";
+import { useEffect, useState } from "react";
 
 export const UserProfileSidebar = ({
   profile,
@@ -17,8 +21,57 @@ export const UserProfileSidebar = ({
 }) => {
   const authProfile = useUserStore((state) => state.profile);
   const router = useRouter();
+  const [currentProfile, setCurrentProfile] = useState<Profile | null>();
+  const [isFav, setIsFav] = useState(false);
+
+  useEffect(() => {
+    setCurrentProfile(profile);
+    if (
+      authProfile?.favorites.find(
+        (fav) => fav.favorite_user_details.id === profile?.user.id,
+      )
+    )
+      setIsFav(true);
+  }, [profile, authProfile]);
 
   if (profile?.id === authProfile?.id) router.push("/profile");
+
+  const followHandler = async () => {
+    if (currentProfile) {
+      const { success, data, error } = await createFavorite({
+        favorite_user: currentProfile?.id,
+      });
+      if (success && currentProfile && data) {
+        setCurrentProfile({
+          ...currentProfile,
+          favorited_by: [...currentProfile?.favorited_by, data],
+        });
+        setIsFav(true);
+        toast(`Вы подписались на ${currentProfile?.user.username}`);
+      }
+      if (error) toast(<ErrorToast error={error} />);
+    }
+  };
+
+  const unfollowHandler = async () => {
+    const favoriteId = currentProfile?.favorited_by.find(
+      (fav) => fav?.user.id === authProfile?.id,
+    )?.id;
+    if (favoriteId) {
+      const { success, error } = await deleteFavorite(favoriteId);
+      if (success && currentProfile) {
+        setCurrentProfile({
+          ...currentProfile,
+          favorited_by: currentProfile?.favorited_by.filter(
+            (fav) => fav?.id !== favoriteId,
+          ),
+        });
+        setIsFav(false);
+        toast(`Вы отписались от ${currentProfile?.user.username}`);
+      }
+      if (error) toast(<ErrorToast error={error} />);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-10 max-md:grid max-md:grid-rows-[auto,auto,auto] py-12 pr-5">
@@ -26,38 +79,40 @@ export const UserProfileSidebar = ({
         <div className="flex justify-center items-center w-full aspect-square overflow-hidden">
           <Image
             src={`${BASE_URL}${
-              profile?.pictures && profile?.pictures?.length > 0
-                ? profile?.pictures[0]?.picture
+              currentProfile?.pictures && currentProfile?.pictures?.length > 0
+                ? currentProfile?.pictures[0]?.picture
                 : "/media/placeholder/avatar.jpg"
             }`}
             className="object-cover"
             width={400}
             height={400}
-            alt={`${profile?.user.username}`}
+            alt={`${currentProfile?.user.username}`}
           />
         </div>
         <div className="flex flex-col gap-5">
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-3">
-              <h4 className="font-medium text-lg">{profile?.user.username}</h4>
-              {profile?.is_verify && (
+              <h4 className="font-medium text-lg">
+                {currentProfile?.user.username}
+              </h4>
+              {currentProfile?.is_verify && (
                 <p className="text-blue text-lg text-left leading-[95%]">✓</p>
               )}
             </div>
             <div className="flex flex-col gap-1 text-white/60 text-sm">
-              <p>{dateFormatter(profile?.birth_date)}</p>
+              <p>{dateFormatter(currentProfile?.birth_date)}</p>
             </div>
           </div>
-          {authProfile?.favorites.find(
-            (fav) => fav.favorite_user_details.id === profile?.user.id
-          ) ? (
-            <Button variant="outline">Отписаться</Button>
+          {isFav ? (
+            <Button onClick={unfollowHandler} variant="outline">
+              Отписаться
+            </Button>
           ) : (
-            <Button>Подписаться</Button>
+            <Button onClick={followHandler}>Подписаться</Button>
           )}
           <div className="flex items-center gap-5">
             <p className="font-medium">Уровень</p>
-            <Rating rating={profile?.rating} />
+            <Rating rating={currentProfile?.rating} />
           </div>
         </div>
       </div>
@@ -89,17 +144,17 @@ export const UserProfileSidebar = ({
           </Tabs.Trigger>
         </div>
       </Tabs.List>
-      {profile && (
+      {currentProfile && (
         <>
           <FavoriteList
             title="Подписки"
-            user={profile}
-            favorites={profile?.favorites || []}
+            user={currentProfile}
+            favorites={currentProfile?.favorites || []}
           />
           <FavoriteList
             title="Подписчики"
-            user={profile}
-            favorites={profile?.favorited_by || []}
+            user={currentProfile}
+            favorites={currentProfile?.favorited_by || []}
             favBy
           />
         </>

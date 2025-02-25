@@ -9,7 +9,7 @@ import { AddGameForm } from "./add-game-form";
 import { DialogPortal } from "./ui/dialog-portal";
 import { Profile } from "@/types/user-type";
 import { BASE_URL } from "@/lib/consts";
-import { dateFormatter } from "./../lib/date-formatter";
+import { dateFormatter } from "@/lib/date-formatter";
 import { createVerificationRequest } from "@/api/verification-api";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
@@ -69,9 +69,7 @@ export const ProfileSidebar = ({ profile }: { profile: Profile | null }) => {
               {profile?.is_verify ? (
                 <p className="text-blue text-lg text-left leading-[95%]">✓</p>
               ) : disabledVerify ? (
-                <p
-                  className="text-white/60 text-xs text-left leading-[95%]"
-                >
+                <p className="text-white/60 text-xs text-left leading-[95%]">
                   Ожидание подтверждения...
                 </p>
               ) : (
