@@ -15,6 +15,8 @@ import { createComment, replyComment } from "@/api/comment-api";
 import { toast } from "sonner";
 import { ErrorToast } from "@/components/error-toast";
 import { useGameStore } from "@/store/game-store";
+import { Dispatch, SetStateAction } from "react";
+import { CommentType } from "@/types/comment-type";
 
 const formSchema = z.object({
   text: z.string().min(1, "Обязательное поле"),
@@ -23,9 +25,16 @@ const formSchema = z.object({
 interface Props {
   gameId: number | undefined;
   repliedCommentId?: number;
+  setComments: Dispatch<SetStateAction<CommentType[] | []>>;
+  prevComments: CommentType[] | [];
 }
 
-export const CreateCommentForm = ({ gameId, repliedCommentId }: Props) => {
+export const CreateCommentForm = ({
+  gameId,
+  repliedCommentId,
+  setComments,
+  prevComments,
+}: Props) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -42,7 +51,6 @@ export const CreateCommentForm = ({ gameId, repliedCommentId }: Props) => {
         text: values.text,
       });
       if (success) {
-        const currentGame = getGame(gameId);
         form.reset();
         if (repliedCommentId && data) {
           const replyRes = await replyComment({
@@ -51,29 +59,39 @@ export const CreateCommentForm = ({ gameId, repliedCommentId }: Props) => {
           });
 
           if (replyRes.success) {
-            if (currentGame?.comments && data)
-              updateGame(gameId, {
-                ...currentGame,
-                comments: currentGame.comments.map((comment) =>
-                  comment.id === repliedCommentId
-                    ? {
-                        ...comment,
-                        replies: [...comment?.replies, data],
-                      }
-                    : comment
-                ),
-              });
+            setComments((prevComments) =>
+              prevComments.map((comment) => {
+                const updateCommentWithReplies = (
+                  currentComment: CommentType
+                ): CommentType => {
+                  if (currentComment.id === repliedCommentId) {
+                    return {
+                      ...currentComment,
+                      replies: [...currentComment.replies, data],
+                    };
+                  } else if (currentComment.replies.length > 0) {
+                    return {
+                      ...currentComment,
+                      replies: currentComment.replies.map(
+                        updateCommentWithReplies
+                      ),
+                    };
+                  }
+                  return currentComment;
+                };
+
+                return updateCommentWithReplies(comment);
+              })
+            );
+            toast("Комментарий опубликован");
+            return;
           } else {
             toast(<ErrorToast error={replyRes?.error} />);
           }
         }
 
-        if (currentGame?.comments && data)
-          updateGame(gameId, {
-            ...currentGame,
-            comments: [...currentGame?.comments, data],
-          });
-        toast(`Ваш комментарий будет опубликован в ближайшее время`);
+        if (data) setComments([...prevComments, data]);
+        toast("Комментарий опубликован");
       } else {
         toast(<ErrorToast error={error} />);
       }

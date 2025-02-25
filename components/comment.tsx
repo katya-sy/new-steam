@@ -6,10 +6,20 @@ import { BASE_URL } from "@/lib/consts";
 import { datetimeFormatter } from "@/lib/date-formatter";
 import Link from "next/link";
 import { CreateCommentForm } from "./create-comment-form";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState, useEffect } from "react";
 
-export const Comment = ({ comment }: { comment: CommentType }) => {
+interface Props {
+  comment: CommentType;
+  setComments: Dispatch<SetStateAction<CommentType[] | []>>;
+  prevComments: CommentType[] | [];
+}
+
+export const Comment = ({ comment, setComments, prevComments }: Props) => {
   const [answer, setAnswer] = useState(false);
+
+  useEffect(() => {
+    setAnswer(false);
+  }, [prevComments]);
 
   return (
     <>
@@ -58,13 +68,20 @@ export const Comment = ({ comment }: { comment: CommentType }) => {
           <CreateCommentForm
             repliedCommentId={comment?.id}
             gameId={comment?.game}
+            setComments={setComments}
+            prevComments={prevComments}
           />
         </div>
       )}
       {comment?.replies.length > 0 && (
         <div className="flex flex-col gap-3 ml-5 md:ml-12 border-l border-l-blue md:border-l-2">
           {comment?.replies.map((comm) => (
-            <Comment comment={comm} key={comm.id} />
+            <Comment
+              comment={comm}
+              key={comm.id}
+              setComments={setComments}
+              prevComments={prevComments}
+            />
           ))}
         </div>
       )}
