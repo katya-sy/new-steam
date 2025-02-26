@@ -3,20 +3,50 @@ import { Delete } from "./shared/delete";
 import Link from "next/link";
 import { Favorite, Profile } from "@/types/user-type";
 import { BASE_URL } from "@/lib/consts";
+import { deleteFavorite } from "@/api/favorite-api";
+import { useUserStore } from "@/store/user-store";
+import { toast } from "sonner";
+import { ErrorToast } from "./error-toast";
+import { useEffect, useState } from "react";
 
 interface Props {
-  favorites: Favorite[] | [];
+  favorites: Favorite[] | null;
   title: string;
   favBy?: boolean;
   user?: Profile;
 }
 
 export const FavoriteList = ({ favorites, title, favBy, user }: Props) => {
+  const profile = useUserStore((state) => state.profile);
+  const setProfile = useUserStore((state) => state.setProfile);
+  const [favors, setFavors] = useState<Favorite[] | null>();
+
+  useEffect(() => {
+    setFavors(favorites);
+  }, [favorites]);
+
+  const unfollowHandler = async (fav: Favorite) => {
+    if (fav?.id) {
+      const { success, error } = await deleteFavorite(fav?.id);
+      if (success && profile) {
+        setProfile({
+          ...profile,
+          favorites: profile?.favorites.filter((f) => f?.id !== fav?.id),
+        });
+        if (favorites) {
+          setFavors(profile?.favorites.filter((f) => f?.id !== fav?.id));
+        }
+        toast(`Вы отписались от ${fav?.favorite_user_details.username}`);
+      }
+      if (error) toast(<ErrorToast error={error} />);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-5 max-md:row-start-2">
       <h3 className="text-lg">{title}</h3>
-      {favorites.length > 0 ? (
-        favorites.map((fav) => (
+      {favors && favors?.length > 0 ? (
+        favors.map((fav) => (
           <div key={fav.id} className="flex justify-between items-center">
             <Link
               href={`/user/${favBy ? fav.user.id : fav.favorite_user_details.id}`}
@@ -42,7 +72,10 @@ export const FavoriteList = ({ favorites, title, favBy, user }: Props) => {
               </p>
             </Link>
             {!favBy && !user && (
-              <button className="text-blue">
+              <button
+                onClick={() => unfollowHandler(fav)}
+                className="text-blue"
+              >
                 <Delete />
               </button>
             )}
