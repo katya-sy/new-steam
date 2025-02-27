@@ -15,8 +15,17 @@ import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { ErrorToast } from "./error-toast";
 import { setCookie, getCookie } from "@/lib/cookie";
+import { Status, Tag } from "@/types/game-type";
+import { useStatusStore } from "@/store/status-store";
+import { useTagStore } from "@/store/tag-store";
 
-export const ProfileSidebar = ({ profile }: { profile: Profile | null }) => {
+interface Props {
+  profile: Profile | null;
+  statuses: Status[] | null;
+  tags: Tag[] | null;
+}
+
+export const ProfileSidebar = ({ profile, statuses, tags }: Props) => {
   const canVerify = async () => {
     const date = await getCookie("verification-date");
     if (date) {
@@ -29,10 +38,17 @@ export const ProfileSidebar = ({ profile }: { profile: Profile | null }) => {
     return false;
   };
   const [disabledVerify, setDisabledVerify] = useState(false);
+  const setStatuses = useStatusStore((state) => state.setStatuses);
+  const setTags = useTagStore((state) => state.setTags);
 
   useEffect(() => {
     canVerify().then((data) => setDisabledVerify(data));
   }, []);
+
+  useEffect(() => {
+    if (statuses) setStatuses(statuses);
+    if (tags) setTags(tags);
+  });
 
   const verificationHandler = async () => {
     const { success, data, error } = await createVerificationRequest();
