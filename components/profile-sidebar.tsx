@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { Edit } from "./shared/edit";
+// import { Edit } from "./shared/edit";
 import * as Tabs from "@radix-ui/react-tabs";
 import { Plus } from "./shared/plus";
 import { FavoriteList } from "./favorite-list";
@@ -15,17 +15,24 @@ import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { ErrorToast } from "./error-toast";
 import { setCookie, getCookie } from "@/lib/cookie";
-import { Status, Tag } from "@/types/game-type";
+import { Game, Status, Tag } from "@/types/game-type";
 import { useStatusStore } from "@/store/status-store";
 import { useTagStore } from "@/store/tag-store";
+import { useGameStore } from "@/store/game-store";
 
 interface Props {
   profile: Profile | null;
   statuses: Status[] | null;
   tags: Tag[] | null;
+  gameData: Game[] | null;
 }
 
-export const ProfileSidebar = ({ profile, statuses, tags }: Props) => {
+export const ProfileSidebar = ({
+  profile,
+  statuses,
+  tags,
+  gameData,
+}: Props) => {
   const canVerify = async () => {
     const date = await getCookie("verification-date");
     if (date) {
@@ -38,6 +45,8 @@ export const ProfileSidebar = ({ profile, statuses, tags }: Props) => {
     return false;
   };
   const [disabledVerify, setDisabledVerify] = useState(false);
+  const games = useGameStore((state) => state.games);
+  const setGames = useGameStore((state) => state.setGames);
   const setStatuses = useStatusStore((state) => state.setStatuses);
   const setTags = useTagStore((state) => state.setTags);
 
@@ -48,7 +57,8 @@ export const ProfileSidebar = ({ profile, statuses, tags }: Props) => {
   useEffect(() => {
     if (statuses) setStatuses(statuses);
     if (tags) setTags(tags);
-  });
+    if (gameData) setGames(gameData);
+  }, [gameData, setGames, setStatuses, setTags, statuses, tags]);
 
   const verificationHandler = async () => {
     const { success, data, error } = await createVerificationRequest();
@@ -106,10 +116,10 @@ export const ProfileSidebar = ({ profile, statuses, tags }: Props) => {
             <p className="font-medium">Уровень</p>
             <span className="font-medium md:text-lg">{profile?.rating}</span>
           </div>
-          <button className="flex items-center gap-1 text-blue">
-            <Edit />
-            <span className="text-sm">Редактировать профиль</span>
-          </button>
+          {/*<button className="flex items-center gap-1 text-blue">*/}
+          {/*  <Edit />*/}
+          {/*  <span className="text-sm">Редактировать профиль</span>*/}
+          {/*</button>*/}
         </div>
       </div>
       <Tabs.List className="flex md:flex-col max-md:flex-wrap gap-3 max-md:row-start-3">
@@ -136,7 +146,12 @@ export const ProfileSidebar = ({ profile, statuses, tags }: Props) => {
             className="flex justify-center items-center gap-3 p-2 border border-blue md:w-full font-medium tabs-trigger"
             value="add"
           >
-            Добавил <span className="text-sm">3</span>
+            Добавил{" "}
+            <span className="text-sm">
+              {games &&
+                games.filter((games) => games?.user.id === profile?.user.id)
+                  .length}
+            </span>
           </Tabs.Trigger>
           <Dialog.Root>
             <Dialog.Trigger className="font-medium text-blue">

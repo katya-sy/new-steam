@@ -5,11 +5,13 @@ import { Header } from "@/components/header";
 import { ProfileSidebar } from "@/components/profile-sidebar";
 import { UserGameTabs } from "@/components/user-game-tabs";
 import * as Tabs from "@radix-ui/react-tabs";
+import { getGames } from "@/api/game-api";
 
 export default async function Profile() {
   const { data } = await getProfile();
   const statusRes = await getStatuses();
   const tagRes = await getTags();
+  const gameRes = await getGames();
 
   return (
     <div>
@@ -22,6 +24,7 @@ export default async function Profile() {
           profile={data}
           statuses={statusRes.data}
           tags={tagRes.data}
+          gameData={gameRes?.data}
         />
         <UserGameTabs />
       </Tabs.Root>
