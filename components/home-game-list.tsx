@@ -37,6 +37,9 @@ export const HomeGameList = ({
 }) => {
   const setGames = useGameStore((state) => state.setGames);
   const setGameScores = useGameStore((state) => state.setGameScores);
+  const search = useGameStore((state) => state.search);
+  const searchTags = useGameStore((state) => state.searchTags);
+  const searchGames = useGameStore((state) => state.searchGames);
   const [recGames, setRecGames] = useState<Game[]>([]);
   const [newGames, setNewGames] = useState<Game[]>([]);
 
@@ -51,6 +54,23 @@ export const HomeGameList = ({
     );
     setNewGames([...data].sort(getNew).slice(0, 5));
   }, [data, gameScores, setGameScores, setGames]);
+
+  if (search || searchTags.length > 0) {
+    return (
+      <div className="flex flex-col gap-5">
+        <h2 className="font-medium text-3xl">Результаты поиска</h2>
+        <div className="gap-5 grid grid-cols-5 max-[1200px]:grid-cols-4 max-sm:grid-cols-2 max-lg:grid-cols-3">
+          {searchGames &&
+            searchGames.map((game) => <GameCard game={game} key={game.id} />)}
+        </div>
+        {searchGames.length === 0 && (
+          <p className="mt-10 text-xl text-white/60 h-full text-center">
+            Ничего не найдено
+          </p>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-10">

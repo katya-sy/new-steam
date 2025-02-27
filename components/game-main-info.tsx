@@ -79,15 +79,15 @@ export const GameMainInfo = ({
             <h5 className="text-lg">В списках</h5>
             <div className="flex items-center gap-1">
               <p className="text-white/60">Хочу поиграть:</p>
-              <p className="text-white">345</p>
+              <p className="text-white">2</p>
             </div>
             <div className="flex items-center gap-1">
               <p className="text-white/60">Играю:</p>
-              <p className="text-white">13</p>
+              <p className="text-white">4</p>
             </div>
             <div className="flex items-center gap-1">
               <p className="text-white/60">Поиграл:</p>
-              <p className="text-white">25</p>
+              <p className="text-white">3</p>
             </div>
           </div>
         </div>

@@ -14,12 +14,17 @@ import { ErrorToast } from "@/components/error-toast";
 import { deleteCookie } from "@/lib/cookie";
 import { logout } from "@/api/user-api";
 import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import { useGameStore } from "@/store/game-store";
 
 export const Header = () => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
   const profile = useUserStore((state) => state.profile);
   const setProfile = useUserStore((state) => state.setProfile);
+  const search = useGameStore((state) => state.search);
+  const setSearch = useGameStore((state) => state.setSearch);
 
   const logoutHandler = async () => {
     const { success, data, error } = await logout();
@@ -90,9 +95,15 @@ export const Header = () => {
             )}
           </div>
         </div>
-        <div className="w-full md:w-1/2">
-          <Input placeholder="Поиск игр..." />
-        </div>
+        {pathname === "/" && (
+          <div className="w-full md:w-1/2">
+            <Input
+              placeholder="Поиск игр..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+        )}
       </div>
     </header>
   );
