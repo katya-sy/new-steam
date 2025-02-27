@@ -7,6 +7,13 @@ export const getGames = async () => {
   });
 };
 
+export const createGame = async (data: FormData) => {
+  return apiInstance<Game>("/game/", {
+    method: "POST",
+    body: data,
+  });
+};
+
 export const getGameById = async (id: number) => {
   return apiInstance<Game>(`/game/${id}`, {
     method: "GET",

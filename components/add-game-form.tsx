@@ -16,31 +16,81 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import { Dispatch, SetStateAction, useState } from "react";
+import { AvatarFileInput } from "@/components/avatar-file-input";
+import { ImagesFileInput } from "@/components/images-file-input";
+import { toast } from "sonner";
+import { ErrorToast } from "@/components/error-toast";
+import { createGame } from "@/api/game-api";
+import { useGameStore } from "@/store/game-store";
 
 const formSchema = z.object({
   name: z.string().min(1, "Обязательное поле"),
   description: z.string().min(1, "Обязательное поле"),
-  // status: z.string().min(1, "Обязательное поле"),
+  status: z.string().min(1, "Обязательное поле"),
   tags: z.array(z.string()).min(1, "Выберите хотя бы один тег"),
-  // resource: z.string().min(1, "Обязательное поле"),
-  // video_source: z.string().min(1, "Обязательное поле"),
+  resource: z.string().min(1, "Обязательное поле"),
+  video_source: z.string().min(1, "Обязательное поле"),
 });
 
-export const AddGameForm = () => {
+export const AddGameForm = ({
+  setOpen,
+}: {
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}) => {
   const statuses = useStatusStore((state) => state.statuses);
   const tags = useTagStore((state) => state.tags);
+  const addGame = useGameStore((state) => state.addGame);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
       description: "",
-      // resource: "",
-      // video_source: "",
+      resource: "",
+      video_source: "",
+      status: "",
     },
   });
+  const [pictures, setPictures] = useState<File[] | null>([]);
+  const [coverPictures, setCoverPictures] = useState<File[] | null>([]);
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const formData = new FormData();
+
+    const status_id = statuses.find((st) => st?.name === values.status)?.id;
+    const tag_ids = tags
+      .filter((tag) => values.tags.includes(tag.name))
+      .map((tag) => tag.id);
+
+    Array.from(pictures || []).forEach((file) => {
+      formData.append(`pictures`, file);
+    });
+
+    Array.from(coverPictures || []).forEach((file) => {
+      formData.append(`cover_picture`, file);
+    });
+
+    formData.append("name", values.name);
+    formData.append("description", values.description);
+    formData.append("resource", values.resource);
+    formData.append("video_source", values.video_source);
+
+    if (status_id) formData.append("status_id", String(status_id));
+    if (tag_ids)
+      Array.from(tag_ids || []).forEach((tagId) => {
+        formData.append(`tag_ids`, String(tagId));
+      });
+
+    const { success, data, error } = await createGame(formData);
+
+    if (success && data) {
+      form.reset();
+      addGame(data);
+      setOpen(false);
+      toast(`Игра ${data?.name} создана`);
+    } else {
+      toast(<ErrorToast error={error} />);
+    }
   }
 
   return (
@@ -49,141 +99,152 @@ export const AddGameForm = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-3"
       >
-        {/* <AvatarFileInput pictures={pictures} setPictures={setPictures} /> */}
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input placeholder="Название" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <textarea
-                  className="bg-transparent px-5 py-2 border border-blue w-full h-20 text-white placeholder:text-white/60 resize-none"
-                  placeholder="Описание"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        {/* <FormField
-          control={form.control}
-          name="status"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Select.Root>
-                  <Select.Trigger className="flex justify-between items-center px-5 py-2 border border-blue w-full font-medium text-base">
-                    <Select.Value placeholder="Статус выхода" />
-                    <Select.Icon asChild className="pt-1">
-                      <Arrow />
-                    </Select.Icon>
-                  </Select.Trigger>
-                  <Select.Portal>
-                    <Select.Content className="bg-bg border border-blue rounded-sm text-white">
-                      <Select.ScrollUpButton />
-                      <Select.Viewport>
-                        {statuses.map((status) => (
-                          <Select.Item
-                            key={status.id}
-                            className="relative px-5 py-2 w-full cursor-pointer"
-                            value={status.name}
-                          >
-                            <Select.ItemIndicator className="absolute inset-0 bg-blue/20" />
-                            <Select.ItemText>{status.name}</Select.ItemText>
-                          </Select.Item>
-                        ))}
-                      </Select.Viewport>
-                      <Select.ScrollDownButton />
-                      <Select.Arrow />
-                    </Select.Content>
-                  </Select.Portal>
-                </Select.Root>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> */}
-        <FormField
-          control={form.control}
-          name="tags"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Controller
-                  name="tags"
-                  control={form.control}
-                  render={({ field }) => (
-                    <ToggleGroup
-                      type="multiple"
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="flex flex-col gap-5 justify-between">
+            <AvatarFileInput
+              pictures={coverPictures}
+              game
+              setPictures={setCoverPictures}
+            />
+            <ImagesFileInput pictures={pictures} setPictures={setPictures} />
+          </div>
+          <div className="flex flex-col gap-3">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input placeholder="Название" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <textarea
+                      className="bg-transparent px-5 py-2 border border-blue w-full h-20 text-white placeholder:text-white/60 resize-none"
+                      placeholder="Описание"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Select.Root
+                      onValueChange={field.onChange}
                       value={field.value}
-                      onValueChange={(value) => field.onChange(value)}
-                      className="flex flex-wrap justify-start gap-2 my-2"
                     >
-                      {tags?.map((tag) => (
-                        <ToggleGroupItem
-                          key={tag.id}
-                          variant="outline"
-                          value={tag.name}
+                      <Select.Trigger className="flex justify-between items-center px-5 py-2 border border-blue w-full font-medium text-base">
+                        <Select.Value placeholder="Статус выхода" />
+                        <Select.Icon asChild className="pt-1">
+                          <Arrow />
+                        </Select.Icon>
+                      </Select.Trigger>
+                      <Select.Portal>
+                        <Select.Content className="bg-bg border border-blue rounded-sm text-white">
+                          <Select.ScrollUpButton />
+                          <Select.Viewport>
+                            {statuses.map((status) => (
+                              <Select.Item
+                                key={status.id}
+                                className="relative px-5 py-2 w-full cursor-pointer"
+                                value={status.name}
+                              >
+                                <Select.ItemIndicator className="absolute inset-0 bg-blue/20" />
+                                <Select.ItemText>{status.name}</Select.ItemText>
+                              </Select.Item>
+                            ))}
+                          </Select.Viewport>
+                          <Select.ScrollDownButton />
+                          <Select.Arrow />
+                        </Select.Content>
+                      </Select.Portal>
+                    </Select.Root>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="resource"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      placeholder="Ссылка на официальный сайт"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="video_source"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input placeholder="Ссылка на видеообзор" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="tags"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Controller
+                      name="tags"
+                      control={form.control}
+                      render={({ field }) => (
+                        <ToggleGroup
+                          type="multiple"
+                          value={field.value}
+                          onValueChange={(value) => field.onChange(value)}
+                          className="flex flex-wrap justify-start gap-2 my-2"
                         >
-                          {tag.name}
-                        </ToggleGroupItem>
-                      ))}
-                    </ToggleGroup>
-                  )}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                          {tags?.map((tag) => (
+                            <ToggleGroupItem
+                              key={tag.id}
+                              variant="outline"
+                              value={tag.name}
+                            >
+                              {tag.name}
+                            </ToggleGroupItem>
+                          ))}
+                        </ToggleGroup>
+                      )}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
         <Button type="submit" size="sm">
           Опубликовать
         </Button>
       </form>
     </Form>
-    // <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-3">
-    //   <Input placeholder="Название" />
-    //   <textarea
-    //     className="bg-transparent px-5 py-2 border border-blue w-full h-20 text-white placeholder:text-white/60 resize-none"
-    //     placeholder="Описание"
-    //   />
-    //   <div className="flex justify-between items-center px-5 py-2 border border-blue border-dashed w-full">
-    //     <span className="text-white/60">Изображения</span>
-    //     <input
-    //       className="before:absolute relative before:inset-0 before:flex before:justify-center before:items-center before:bg-blue w-28 xs:w-[174px] font-medium text-bg text-sm before:text-center max-xs:text-wrap before:content-['Загрузить_изображение']"
-    //       type="file"
-    //       name=""
-    //       id=""
-    //     />
-    //   </div>
-
-    //   <ToggleGroup
-    //     className="flex flex-wrap justify-start gap-2 my-2"
-    //     type="multiple"
-    //   >
-    //     {tags?.map((tag) => (
-    //       <ToggleGroupItem key={tag?.id} variant="outline" value={tag?.name}>
-    //         {tag?.name}
-    //       </ToggleGroupItem>
-    //     ))}
-    //   </ToggleGroup>
-    //   <Input placeholder="Ссылка на официальный сайт" />
-    //   <Input placeholder="Ссылка на видеообзор" />
-    //   <Button>Опубликовать</Button>
-    // </form>
   );
 };
 

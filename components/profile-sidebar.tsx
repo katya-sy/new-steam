@@ -12,13 +12,14 @@ import { BASE_URL } from "@/lib/consts";
 import { dateFormatter } from "@/lib/date-formatter";
 import { createVerificationRequest } from "@/api/verification-api";
 import { toast } from "sonner";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ErrorToast } from "./error-toast";
 import { setCookie, getCookie } from "@/lib/cookie";
 import { Game, Status, Tag } from "@/types/game-type";
 import { useStatusStore } from "@/store/status-store";
 import { useTagStore } from "@/store/tag-store";
 import { useGameStore } from "@/store/game-store";
+import { Close } from "@/components/shared/close";
 
 interface Props {
   profile: Profile | null;
@@ -45,6 +46,7 @@ export const ProfileSidebar = ({
     return false;
   };
   const [disabledVerify, setDisabledVerify] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
   const games = useGameStore((state) => state.games);
   const setGames = useGameStore((state) => state.setGames);
   const setStatuses = useStatusStore((state) => state.setStatuses);
@@ -153,18 +155,25 @@ export const ProfileSidebar = ({
                   .length}
             </span>
           </Tabs.Trigger>
-          <Dialog.Root>
+          <Dialog.Root open={open} onOpenChange={setOpen}>
             <Dialog.Trigger className="font-medium text-blue">
               <Plus />
             </Dialog.Trigger>
-            <DialogPortal>
-              <div className="flex flex-col gap-12">
-                <Dialog.Title className="font-medium text-white text-2xl">
-                  Добавление игры
-                </Dialog.Title>
-                <AddGameForm />
-              </div>
-            </DialogPortal>
+            <Dialog.Portal>
+              <Dialog.Overlay className="absolute inset-0 bg-black/70 w-screen" />
+              <Dialog.Content className="top-1/2 left-1/2 fixed bg-bg p-5 overflow-y-auto rounded-lg max-[700px]:h-dvh max-[700px]:w-full w-[700px] -translate-x-1/2 -translate-y-1/2">
+                <Dialog.Description />
+                <div className="flex flex-col gap-12">
+                  <Dialog.Title className="font-medium text-white text-2xl">
+                    Добавление игры
+                  </Dialog.Title>
+                  <AddGameForm setOpen={setOpen} />
+                </div>
+                <Dialog.Close className="top-2 right-2 absolute">
+                  <Close />
+                </Dialog.Close>
+              </Dialog.Content>
+            </Dialog.Portal>
           </Dialog.Root>
         </div>
       </Tabs.List>
