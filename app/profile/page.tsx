@@ -17,7 +17,7 @@ export default async function Profile() {
     <div>
       <Header />
       <Tabs.Root
-        defaultValue="wish"
+        defaultValue="add"
         className="gap-5 grid grid-cols-6 max-[1200px]:grid-cols-4 max-md:grid-cols-1 container"
       >
         <ProfileSidebar
