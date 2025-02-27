@@ -28,3 +28,10 @@ export type Game = {
   pictures: GamePicture[];
   comments: CommentType[];
 };
+
+export type GameScore = {
+  id: number;
+  user: User;
+  game: number;
+  score: number;
+};

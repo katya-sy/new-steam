@@ -1,9 +1,10 @@
+"use client";
 import Image from "next/image";
-import { Rating } from "./rating";
 import { GameListSelect } from "./game-list-select";
 import Link from "next/link";
 import { Game } from "@/types/game-type";
 import { BASE_URL } from "@/lib/consts";
+import { GameRating } from "@/components/game-rating";
 
 export const GameCard = ({ game }: { game: Game }) => {
   return (
@@ -24,7 +25,7 @@ export const GameCard = ({ game }: { game: Game }) => {
         </div>
         <div className="flex justify-between items-start gap-3 max-w-full">
           <h3 className="flex-shrink text-xl md:text-2xl">{game?.name}</h3>
-          <Rating rating={game?.rating} />
+          <GameRating game={game} />
         </div>
       </div>
       <div className="flex flex-col gap-5 font-medium">

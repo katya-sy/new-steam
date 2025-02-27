@@ -1,12 +1,27 @@
+"use client";
 import { GameListSelect } from "@/components/game-list-select";
-import { Rating } from "@/components/rating";
-import { Game } from "@/types/game-type";
+import { Game, GameScore } from "@/types/game-type";
 import Image from "next/image";
 import Link from "next/link";
 import { dateFormatter } from "@/lib/date-formatter";
 import { BASE_URL } from "@/lib/consts";
+import { useGameStore } from "@/store/game-store";
+import { useEffect } from "react";
+import { GameRating } from "@/components/game-rating";
 
-export const GameMainInfo = ({ game }: { game: Game | null }) => {
+export const GameMainInfo = ({
+  game,
+  gameScores,
+}: {
+  game: Game | null;
+  gameScores: GameScore[] | null;
+}) => {
+  const setGameScores = useGameStore((state) => state.setGameScores);
+
+  useEffect(() => {
+    setGameScores(gameScores);
+  }, [gameScores, setGameScores]);
+
   return (
     <div className="flex max-md:flex-col gap-10 lg:gap-32">
       <div className="flex justify-center items-center bg-black/10 min-h-full overflow-hidden">
@@ -26,7 +41,7 @@ export const GameMainInfo = ({ game }: { game: Game | null }) => {
         <div className="flex flex-col gap-5">
           <div className="relative flex max-lg:flex-wrap items-center gap-x-10 gap-y-2">
             <h1 className="font-medium text-3xl lg:text-4xl">{game?.name}</h1>
-            <Rating />
+            {game && <GameRating game={game} />}
             <div
               className={`bg-bg/90 px-1 border ${game?.status.play ? "border-green-500" : "border-amber-500"} text-xl`}
             >
@@ -47,11 +62,15 @@ export const GameMainInfo = ({ game }: { game: Game | null }) => {
               </p>
               <div className="flex items-center gap-3">
                 <p className="font-medium">{game?.user.username}</p>
-                <Rating rating={game?.profile.rating} />
+                {/*<Rating rating={game?.profile.rating} />*/}
               </div>
             </div>
             <div className="flex items-center gap-1 font-medium">
-              <a className="text-blue underline" href={game?.resource} target="_blank">
+              <a
+                className="text-blue underline"
+                href={game?.resource}
+                target="_blank"
+              >
                 Официальный сайт
               </a>
             </div>

@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { GameCard } from "./game-card";
-import { Game } from "@/types/game-type";
+import { Game, GameScore } from "@/types/game-type";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "@/lib/consts";
 import { useGameStore } from "@/store/game-store";
@@ -28,13 +28,21 @@ const getRecommend = (a: Game, b: Game) => {
   return b.comments.length - a.comments.length;
 };
 
-export const HomeGameList = ({ data }: { data: Game[] }) => {
+export const HomeGameList = ({
+  data,
+  gameScores,
+}: {
+  data: Game[];
+  gameScores: GameScore[] | null;
+}) => {
   const setGames = useGameStore((state) => state.setGames);
+  const setGameScores = useGameStore((state) => state.setGameScores);
   const [recGames, setRecGames] = useState<Game[]>([]);
   const [newGames, setNewGames] = useState<Game[]>([]);
 
   useEffect(() => {
     setGames(data);
+    setGameScores(gameScores);
     setRecGames(
       [...data]
         .filter((g) => g.profile.is_verify)
@@ -42,7 +50,7 @@ export const HomeGameList = ({ data }: { data: Game[] }) => {
         .slice(0, 6),
     );
     setNewGames([...data].sort(getNew).slice(0, 5));
-  }, [data]);
+  }, [data, gameScores, setGameScores, setGames]);
 
   return (
     <div className="flex flex-col gap-10">
