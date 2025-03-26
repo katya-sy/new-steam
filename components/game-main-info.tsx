@@ -1,5 +1,4 @@
 "use client";
-import { GameListSelect } from "@/components/game-list-select";
 import { Game, GameScore } from "@/types/game-type";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,19 +7,39 @@ import { BASE_URL } from "@/lib/consts";
 import { useGameStore } from "@/store/game-store";
 import { useEffect } from "react";
 import { GameRating } from "@/components/game-rating";
+import { CreateUserGameForm } from "@/components/create-user-game-form";
+import { useUserGameStore } from "@/store/user-game-store";
+import { ListType, UserGame } from "@/types/user-game-type";
+import { UpdateUserGameForm } from "@/components/update-user-game-form";
 
 export const GameMainInfo = ({
   game,
   gameScores,
+  listsData,
+  userGamesData,
 }: {
   game: Game | null;
   gameScores: GameScore[] | null;
+  listsData: ListType[] | null;
+  userGamesData: UserGame[] | null;
 }) => {
   const setGameScores = useGameStore((state) => state.setGameScores);
+  const setUserGames = useUserGameStore((state) => state.setUserGames);
+  const setLists = useUserGameStore((state) => state.setLists);
+  const userGames = useUserGameStore((state) => state.userGames);
 
   useEffect(() => {
     setGameScores(gameScores);
-  }, [gameScores, setGameScores]);
+    setLists(listsData);
+    setUserGames(userGamesData);
+  }, [
+    gameScores,
+    listsData,
+    setGameScores,
+    setLists,
+    setUserGames,
+    userGamesData,
+  ]);
 
   return (
     <div className="flex max-md:flex-col gap-10 lg:gap-32">
@@ -91,7 +110,16 @@ export const GameMainInfo = ({
             </div>
           </div>
         </div>
-        <GameListSelect />
+        {userGames &&
+        userGames?.find((userGame) => userGame?.game.id === game?.id) ? (
+          <UpdateUserGameForm
+            userGame={userGames?.find(
+              (userGame) => userGame?.game.id === game?.id,
+            )}
+          />
+        ) : (
+          game && <CreateUserGameForm game={game} />
+        )}
         <div className="flex items-baseline gap-10 font-medium">
           <Link className="text-blue" href="#review">
             Обзор

@@ -4,17 +4,25 @@ import { Header } from "@/components/header";
 import { BASE_URL } from "@/lib/consts";
 import Image from "next/image";
 import { CommentList } from "@/components/comment-list";
+import { getLists, getUserGames } from "@/api/user-game-api";
 
 export default async function Game({ params }: { params: { id: string } }) {
   const { id } = params;
   const { data } = await getGameById(Number(id));
   const gameScoreRes = await getGameScores();
+  const listRes = await getLists();
+  const userGamesRes = await getUserGames();
 
   return (
     <div>
       <Header />
       <div className="flex flex-col gap-10 my-12 container">
-        <GameMainInfo game={data} gameScores={gameScoreRes?.data} />
+        <GameMainInfo
+          game={data}
+          gameScores={gameScoreRes?.data}
+          listsData={listRes?.data}
+          userGamesData={userGamesRes?.data}
+        />
         <div className="gap-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
           {data?.pictures &&
             data?.pictures.length > 0 &&

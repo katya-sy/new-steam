@@ -6,6 +6,8 @@ import { Game, GameScore } from "@/types/game-type";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "@/lib/consts";
 import { useGameStore } from "@/store/game-store";
+import { ListType, UserGame } from "@/types/user-game-type";
+import { useUserGameStore } from "@/store/user-game-store";
 
 const getNew = (a: Game, b: Game) => (a["date"] < b["date"] ? 1 : -1);
 
@@ -31,15 +33,21 @@ const getRecommend = (a: Game, b: Game) => {
 export const HomeGameList = ({
   data,
   gameScores,
+  listsData,
+  userGamesData,
 }: {
   data: Game[];
   gameScores: GameScore[] | null;
+  listsData: ListType[] | null;
+  userGamesData: UserGame[] | null;
 }) => {
   const setGames = useGameStore((state) => state.setGames);
   const setGameScores = useGameStore((state) => state.setGameScores);
   const search = useGameStore((state) => state.search);
   const searchTags = useGameStore((state) => state.searchTags);
   const searchGames = useGameStore((state) => state.searchGames);
+  const setUserGames = useUserGameStore((state) => state.setUserGames);
+  const setLists = useUserGameStore((state) => state.setLists);
   const [recGames, setRecGames] = useState<Game[]>([]);
   const [newGames, setNewGames] = useState<Game[]>([]);
 
@@ -52,8 +60,19 @@ export const HomeGameList = ({
         .sort(getRecommend)
         .slice(0, 6),
     );
+    setLists(listsData);
+    setUserGames(userGamesData);
     setNewGames([...data].sort(getNew).slice(0, 5));
-  }, [data, gameScores, setGameScores, setGames]);
+  }, [
+    data,
+    gameScores,
+    listsData,
+    setGameScores,
+    setGames,
+    setLists,
+    setUserGames,
+    userGamesData,
+  ]);
 
   if (search || searchTags.length > 0) {
     return (

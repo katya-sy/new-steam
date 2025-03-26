@@ -1,12 +1,16 @@
 "use client";
 import Image from "next/image";
-import { GameListSelect } from "./game-list-select";
+import { CreateUserGameForm } from "./create-user-game-form";
 import Link from "next/link";
 import { Game } from "@/types/game-type";
 import { BASE_URL } from "@/lib/consts";
 import { GameRating } from "@/components/game-rating";
+import { UpdateUserGameForm } from "@/components/update-user-game-form";
+import { useUserGameStore } from "@/store/user-game-store";
 
 export const GameCard = ({ game }: { game: Game }) => {
+  const userGames = useUserGameStore((state) => state.userGames);
+
   return (
     <div className="relative flex flex-col justify-between gap-5">
       <div className="flex flex-col gap-5">
@@ -36,7 +40,16 @@ export const GameCard = ({ game }: { game: Game }) => {
           >
             Подробнее
           </Link>
-          <GameListSelect />
+          {userGames &&
+          userGames?.find((userGame) => userGame?.game.id === game?.id) ? (
+            <UpdateUserGameForm
+              userGame={userGames?.find(
+                (userGame) => userGame?.game.id === game?.id,
+              )}
+            />
+          ) : (
+            <CreateUserGameForm game={game} />
+          )}
         </div>
       </div>
       <div
