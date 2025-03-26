@@ -1,12 +1,10 @@
 "use client";
 import Image from "next/image";
-// import { Edit } from "./shared/edit";
 import * as Tabs from "@radix-ui/react-tabs";
 import { Plus } from "./shared/plus";
 import { FavoriteList } from "./favorite-list";
 import * as Dialog from "@radix-ui/react-dialog";
 import { AddGameForm } from "./add-game-form";
-import { DialogPortal } from "./ui/dialog-portal";
 import { Profile } from "@/types/user-type";
 import { BASE_URL } from "@/lib/consts";
 import { dateFormatter } from "@/lib/date-formatter";
@@ -20,12 +18,16 @@ import { useStatusStore } from "@/store/status-store";
 import { useTagStore } from "@/store/tag-store";
 import { useGameStore } from "@/store/game-store";
 import { Close } from "@/components/shared/close";
+import { ListType, UserGame } from "@/types/user-game-type";
+import { useUserGameStore } from "@/store/user-game-store";
 
 interface Props {
   profile: Profile | null;
   statuses: Status[] | null;
   tags: Tag[] | null;
   gameData: Game[] | null;
+  listsData: ListType[] | null;
+  userGamesData: UserGame[] | null;
 }
 
 export const ProfileSidebar = ({
@@ -33,6 +35,8 @@ export const ProfileSidebar = ({
   statuses,
   tags,
   gameData,
+  listsData,
+  userGamesData,
 }: Props) => {
   const canVerify = async () => {
     const date = await getCookie("verification-date");
@@ -51,6 +55,10 @@ export const ProfileSidebar = ({
   const setGames = useGameStore((state) => state.setGames);
   const setStatuses = useStatusStore((state) => state.setStatuses);
   const setTags = useTagStore((state) => state.setTags);
+  const setUserGames = useUserGameStore((state) => state.setUserGames);
+  const setLists = useUserGameStore((state) => state.setLists);
+  const lists = useUserGameStore((state) => state.lists);
+  const userGames = useUserGameStore((state) => state.userGames);
 
   useEffect(() => {
     canVerify().then((data) => setDisabledVerify(data));
@@ -60,7 +68,20 @@ export const ProfileSidebar = ({
     if (statuses) setStatuses(statuses);
     if (tags) setTags(tags);
     if (gameData) setGames(gameData);
-  }, [gameData, setGames, setStatuses, setTags, statuses, tags]);
+    setLists(listsData);
+    setUserGames(userGamesData);
+  }, [
+    gameData,
+    listsData,
+    setGames,
+    setLists,
+    setStatuses,
+    setTags,
+    setUserGames,
+    statuses,
+    tags,
+    userGamesData,
+  ]);
 
   const verificationHandler = async () => {
     const { success, data, error } = await createVerificationRequest();
@@ -68,7 +89,7 @@ export const ProfileSidebar = ({
       toast("Заявка на верификацию отправлена");
       setDisabledVerify(true);
       if (data) {
-        setCookie("verification-date", data?.date);
+        await setCookie("verification-date", data?.date);
       }
     }
     if (error) {
@@ -110,7 +131,12 @@ export const ProfileSidebar = ({
               )}
             </div>
             <div className="flex flex-col gap-1 text-white/60 text-sm">
-              <a href="mailto:username@gmail.com">{profile?.user.email}</a>
+              <a
+                href={`mailto:${profile?.user.email}`}
+                className="overflow-hidden whitespace-nowrap overflow-ellipsis"
+              >
+                {profile?.user.email}
+              </a>
               <p>{dateFormatter(profile?.birth_date)}</p>
             </div>
           </div>
@@ -125,24 +151,19 @@ export const ProfileSidebar = ({
         </div>
       </div>
       <Tabs.List className="flex md:flex-col max-md:flex-wrap gap-3 max-md:row-start-3">
-        <Tabs.Trigger
-          className="flex justify-center items-center gap-3 p-2 border border-blue md:w-full font-medium tabs-trigger"
-          value="wish"
-        >
-          Хочу поиграть <span className="text-sm">28</span>
-        </Tabs.Trigger>
-        <Tabs.Trigger
-          className="flex justify-center items-center gap-3 p-2 border border-blue md:w-full font-medium tabs-trigger"
-          value="play"
-        >
-          Играю <span className="text-sm">45</span>
-        </Tabs.Trigger>
-        <Tabs.Trigger
-          className="flex justify-center items-center gap-3 max-md:mr-3 p-2 border border-blue md:w-full font-medium tabs-trigger"
-          value="finish"
-        >
-          Поиграл <span className="text-sm">23</span>
-        </Tabs.Trigger>
+        {lists &&
+          lists.map((l) => (
+            <Tabs.Trigger
+              key={l.id}
+              className="flex justify-center items-center gap-3 p-2 border border-blue md:w-full font-medium tabs-trigger"
+              value={l.name}
+            >
+              {l.name}{" "}
+              <span className="text-sm">
+                {userGames?.filter((ug) => ug?.list.id === l.id).length || 0}
+              </span>
+            </Tabs.Trigger>
+          ))}
         <div className="flex items-center gap-3 md:gap-5 md:mt-7">
           <Tabs.Trigger
             className="flex justify-center items-center gap-3 p-2 border border-blue md:w-full font-medium tabs-trigger"

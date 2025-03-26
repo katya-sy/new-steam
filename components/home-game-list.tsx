@@ -41,8 +41,10 @@ export const HomeGameList = ({
   listsData: ListType[] | null;
   userGamesData: UserGame[] | null;
 }) => {
+  const games = useGameStore((state) => state.games);
   const setGames = useGameStore((state) => state.setGames);
   const setGameScores = useGameStore((state) => state.setGameScores);
+  const showAllGames = useGameStore((state) => state.showAllGames);
   const search = useGameStore((state) => state.search);
   const searchTags = useGameStore((state) => state.searchTags);
   const searchGames = useGameStore((state) => state.searchGames);
@@ -85,6 +87,29 @@ export const HomeGameList = ({
         {searchGames.length === 0 && (
           <p className="mt-10 text-xl text-white/60 h-full text-center">
             Ничего не найдено
+          </p>
+        )}
+      </div>
+    );
+  }
+
+  if (showAllGames) {
+    return (
+      <div className="flex flex-col gap-5">
+        <h2 className="font-medium text-3xl">Все игры</h2>
+        <div className="gap-5 grid grid-cols-5 max-[1200px]:grid-cols-4 max-sm:grid-cols-2 max-lg:grid-cols-3">
+          {(searchGames &&
+            searchGames.length !== 0 &&
+            searchGames.map((game) => (
+              <GameCard game={game} key={game.id} />
+            ))) ||
+            (games &&
+              games.length !== 0 &&
+              games.map((game) => <GameCard game={game} key={game.id} />))}
+        </div>
+        {searchGames.length === 0 && games.length === 0 && (
+          <p className="mt-10 text-xl text-white/60 h-full text-center">
+            Ничего нет
           </p>
         )}
       </div>

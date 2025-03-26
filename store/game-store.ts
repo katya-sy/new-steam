@@ -12,6 +12,8 @@ interface GameState {
   gameScores: GameScore[] | null;
   setGameScores: (gameScores: GameScore[] | null) => void;
 
+  showAllGames: boolean;
+  setShowAllGames: (showAllGames: boolean) => void;
   search: string;
   searchTags: string[];
   searchGames: Game[];
@@ -37,6 +39,9 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   gameScores: [],
   setGameScores: (gameScores: GameScore[] | null) => set({ gameScores }),
+
+  showAllGames: false,
+  setShowAllGames: (showAllGames) => set({ showAllGames }),
 
   search: "",
   searchTags: [],
