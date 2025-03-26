@@ -2,7 +2,6 @@
 import { useTagStore } from "@/store/tag-store";
 import { useGameStore } from "@/store/game-store";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Button } from "@/components/ui/button";
 
 export const FilterSidebar = () => {
   const tags = useTagStore((state) => state.tags);
@@ -20,13 +19,12 @@ export const FilterSidebar = () => {
     <div className="flex flex-col gap-5 md:gap-10 py-5 md:py-12 pr-5">
       <div className="flex flex-col gap-2 md:gap-5">
         {!(searchTags.length !== 0 || search) && (
-          <Button
+          <div
             onClick={() => setShowAllGames(!showAllGames)}
-            size="sm"
-            className="mb-3"
+            className="mb-3 font-medium text-blue cursor-pointer"
           >
-            {showAllGames ? "Лучшие игры" : "Все игры"}
-          </Button>
+            {showAllGames ? "Смотреть лучшие игры" : "Смотреть все игры"}
+          </div>
         )}
         <h3 className="font-medium text-lg md:text-xl">Популярные теги</h3>
         <ToggleGroup
