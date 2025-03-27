@@ -9,6 +9,7 @@ import { BASE_URL } from "@/lib/consts";
 import Image from "next/image";
 import { CommentList } from "@/components/comment-list";
 import { getLists, getUserGames } from "@/api/user-game-api";
+import { getUserScores } from "@/api/user-api";
 
 export default async function Game({ params }: { params: { id: string } }) {
   const { id } = params;
@@ -17,6 +18,7 @@ export default async function Game({ params }: { params: { id: string } }) {
   const listRes = await getLists();
   const userGamesRes = await getUserGames();
   const gameStatisticRes = await getGameStatisticById(Number(id));
+  const userScoreRes = await getUserScores();
 
   return (
     <div>
@@ -28,6 +30,7 @@ export default async function Game({ params }: { params: { id: string } }) {
           listsData={listRes?.data}
           userGamesData={userGamesRes?.data}
           statistic={gameStatisticRes?.data}
+          userScoresData={userScoreRes?.data}
         />
         <div className="gap-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
           {data?.pictures &&

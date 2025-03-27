@@ -13,6 +13,8 @@ import { ListType, UserGame } from "@/types/user-game-type";
 import { UpdateUserGameForm } from "@/components/update-user-game-form";
 import { useGameStatisticStore } from "@/store/game-statistic-store";
 import { useUserStore } from "@/store/user-store";
+import { UserRating } from "@/components/user-rating";
+import { UserScore } from "@/types/user-type";
 
 export const GameMainInfo = ({
   game,
@@ -20,12 +22,14 @@ export const GameMainInfo = ({
   listsData,
   userGamesData,
   statistic,
+  userScoresData,
 }: {
   game: Game | null;
   gameScores: GameScore[] | null;
   listsData: ListType[] | null;
   userGamesData: UserGame[] | null;
   statistic: GameStatistic[] | null;
+  userScoresData: UserScore[] | null;
 }) => {
   const profile = useUserStore((state) => state.profile);
   const setGameScores = useGameStore((state) => state.setGameScores);
@@ -34,11 +38,13 @@ export const GameMainInfo = ({
   const userGames = useUserGameStore((state) => state.userGames);
   const gameStatistic = useGameStatisticStore((state) => state.statistic);
   const setGameStatistic = useGameStatisticStore((state) => state.setStatistic);
+  const setUserScores = useUserStore((state) => state.setUserScores);
 
   useEffect(() => {
     setGameScores(gameScores);
     setLists(listsData);
     setUserGames(userGamesData);
+    setUserScores(userScoresData);
     if (statistic) setGameStatistic(statistic);
   }, [
     gameScores,
@@ -47,8 +53,10 @@ export const GameMainInfo = ({
     setGameStatistic,
     setLists,
     setUserGames,
+    setUserScores,
     statistic,
     userGamesData,
+    userScoresData,
   ]);
 
   return (
@@ -91,7 +99,7 @@ export const GameMainInfo = ({
               </p>
               <div className="flex items-center gap-3">
                 <p className="font-medium">{game?.user.username}</p>
-                {/*<Rating rating={game?.profile.rating} />*/}
+                {game?.profile && <UserRating prof={game?.profile} />}
               </div>
             </div>
             <div className="flex items-center gap-1 font-medium">

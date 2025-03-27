@@ -1,9 +1,8 @@
 "use client";
 import Image from "next/image";
-import { Rating } from "./rating";
 import * as Tabs from "@radix-ui/react-tabs";
 import { FavoriteList } from "./favorite-list";
-import { Profile } from "@/types/user-type";
+import { Profile, UserScore } from "@/types/user-type";
 import { BASE_URL } from "@/lib/consts";
 import { dateFormatter } from "@/lib/date-formatter";
 import { Button } from "./ui/button";
@@ -17,6 +16,7 @@ import { ListType, UserGame } from "@/types/user-game-type";
 import { useUserGameStore } from "@/store/user-game-store";
 import { Game } from "@/types/game-type";
 import { useGameStore } from "@/store/game-store";
+import { UserRating } from "@/components/user-rating";
 
 export const UserProfileSidebar = ({
   profile,
@@ -24,12 +24,14 @@ export const UserProfileSidebar = ({
   listsData,
   otherUserGamesData,
   userGamesData,
+  userScoresData,
 }: {
   profile: Profile | null;
   gameData: Game[] | null;
   listsData: ListType[] | null;
   otherUserGamesData: UserGame[] | null;
   userGamesData: UserGame[] | null;
+  userScoresData: UserScore[] | null;
 }) => {
   const authProfile = useUserStore((state) => state.profile);
   const setLists = useUserGameStore((state) => state.setLists);
@@ -41,6 +43,7 @@ export const UserProfileSidebar = ({
   );
   const otherUserGames = useUserGameStore((state) => state.otherUserGames);
   const setUserGames = useUserGameStore((state) => state.setUserGames);
+  const setUserScores = useUserStore((state) => state.setUserScores);
   const router = useRouter();
   const [currentProfile, setCurrentProfile] = useState<Profile | null>();
   const [isFav, setIsFav] = useState(false);
@@ -51,6 +54,7 @@ export const UserProfileSidebar = ({
     if (gameData) setGames(gameData);
     if (otherUserGamesData) setOtherUserGames(otherUserGamesData);
     setUserGames(userGamesData);
+    setUserScores(userScoresData);
     if (
       authProfile?.favorites.find(
         (fav) => fav.favorite_user_details.id === profile?.user.id,
@@ -68,6 +72,8 @@ export const UserProfileSidebar = ({
     setOtherUserGames,
     setUserGames,
     userGamesData,
+    setUserScores,
+    userScoresData,
   ]);
 
   if (profile?.id === authProfile?.id) router.push("/profile");
@@ -148,7 +154,7 @@ export const UserProfileSidebar = ({
           )}
           <div className="flex items-center gap-5">
             <p className="font-medium">Уровень</p>
-            <Rating rating={currentProfile?.rating} />
+            {profile && <UserRating prof={profile} />}
           </div>
         </div>
       </div>

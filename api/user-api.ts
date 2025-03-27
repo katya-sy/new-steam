@@ -1,5 +1,5 @@
 import { apiInstance } from "./api-instance";
-import { Profile } from "@/types/user-type";
+import { Profile, UserScore } from "@/types/user-type";
 
 export const login = async (data: { username: string; password: string }) => {
   return apiInstance<{ key: string }>("/user/auth/login", {
@@ -33,5 +33,33 @@ export const getProfile = async () => {
 export const getUserById = async (id: number) => {
   return apiInstance<Profile>(`/user/${id}`, {
     method: "GET",
+  });
+};
+
+export const getUserScores = async () => {
+  return apiInstance<UserScore[]>("/user/user-score", {
+    method: "GET",
+  });
+};
+
+export const createScore = async (data: {
+  score: number;
+  rated_user: number;
+}) => {
+  return apiInstance<UserScore>("/user/user-score", {
+    method: "POST",
+    body: data,
+  });
+};
+
+export const updateScore = async (
+  data: {
+    score: number;
+  },
+  id: number,
+) => {
+  return apiInstance<UserScore>(`/user/user-score/${id}`, {
+    method: "PATCH",
+    body: data,
   });
 };

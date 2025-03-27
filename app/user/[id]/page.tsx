@@ -1,4 +1,4 @@
-import { getUserById } from "@/api/user-api";
+import { getUserById, getUserScores } from "@/api/user-api";
 import { Header } from "@/components/header";
 import { UserProfileSidebar } from "@/components/user-profile-sidebar";
 import * as Tabs from "@radix-ui/react-tabs";
@@ -13,6 +13,7 @@ export default async function User({ params }: { params: { id: string } }) {
   const otherUserGamesRes = await getOtherUserGames(Number(id));
   const gameRes = await getGames();
   const userGamesRes = await getUserGames();
+  const userScoreRes = await getUserScores();
 
   return (
     <div>
@@ -22,6 +23,7 @@ export default async function User({ params }: { params: { id: string } }) {
         className="gap-5 grid grid-cols-6 max-[1200px]:grid-cols-4 max-md:grid-cols-1 container"
       >
         <UserProfileSidebar
+          userScoresData={userScoreRes?.data}
           profile={data}
           gameData={gameRes?.data}
           listsData={listRes?.data}

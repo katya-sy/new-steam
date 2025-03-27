@@ -26,3 +26,10 @@ export type Profile = {
   is_verify: boolean;
   is_archive: boolean;
 };
+
+export type UserScore = {
+  id: number;
+  user: User;
+  rated_user: number;
+  score: number;
+};

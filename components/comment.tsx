@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-// import { Rating } from "./rating";
 import { CommentType } from "@/types/comment-type";
 import { BASE_URL } from "@/lib/consts";
 import { datetimeFormatter } from "@/lib/date-formatter";
@@ -12,6 +11,7 @@ import { deleteComment } from "@/api/comment-api";
 import { toast } from "sonner";
 import { ErrorToast } from "@/components/error-toast";
 import { UpdateCommentForm } from "./update-comment-form";
+import { UserRating } from "@/components/user-rating";
 
 interface Props {
   comment: CommentType;
@@ -70,7 +70,7 @@ export const Comment = ({ comment, setComments, prevComments }: Props) => {
                 >
                   {comment?.user.username}
                 </Link>
-                {/*<Rating />*/}
+                <UserRating prof={comment?.profile} />
               </div>
               <div className="flex items-center gap-2">
                 <button
@@ -101,7 +101,6 @@ export const Comment = ({ comment, setComments, prevComments }: Props) => {
               <p className="text-white/60 text-xs">
                 {datetimeFormatter(comment?.date)}
               </p>
-              {/*<Rating rating={comment?.rating} />*/}
             </div>
           </div>
           <p>{comment?.text}</p>
@@ -129,7 +128,7 @@ export const Comment = ({ comment, setComments, prevComments }: Props) => {
                 >
                   {comment?.user.username}
                 </Link>
-                {/*<Rating />*/}
+                <UserRating prof={comment?.profile} />
               </div>
             </div>
             <div className="flex items-center gap-5 ml-auto">
