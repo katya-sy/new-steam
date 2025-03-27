@@ -1,5 +1,5 @@
 "use client";
-import { Game, GameScore } from "@/types/game-type";
+import { Game, GameScore, GameStatistic } from "@/types/game-type";
 import Image from "next/image";
 import Link from "next/link";
 import { dateFormatter } from "@/lib/date-formatter";
@@ -11,33 +11,43 @@ import { CreateUserGameForm } from "@/components/create-user-game-form";
 import { useUserGameStore } from "@/store/user-game-store";
 import { ListType, UserGame } from "@/types/user-game-type";
 import { UpdateUserGameForm } from "@/components/update-user-game-form";
+import { useGameStatisticStore } from "@/store/game-statistic-store";
+import { useUserStore } from "@/store/user-store";
 
 export const GameMainInfo = ({
   game,
   gameScores,
   listsData,
   userGamesData,
+  statistic,
 }: {
   game: Game | null;
   gameScores: GameScore[] | null;
   listsData: ListType[] | null;
   userGamesData: UserGame[] | null;
+  statistic: GameStatistic[] | null;
 }) => {
+  const profile = useUserStore((state) => state.profile);
   const setGameScores = useGameStore((state) => state.setGameScores);
   const setUserGames = useUserGameStore((state) => state.setUserGames);
   const setLists = useUserGameStore((state) => state.setLists);
   const userGames = useUserGameStore((state) => state.userGames);
+  const gameStatistic = useGameStatisticStore((state) => state.statistic);
+  const setGameStatistic = useGameStatisticStore((state) => state.setStatistic);
 
   useEffect(() => {
     setGameScores(gameScores);
     setLists(listsData);
     setUserGames(userGamesData);
+    if (statistic) setGameStatistic(statistic);
   }, [
     gameScores,
     listsData,
     setGameScores,
+    setGameStatistic,
     setLists,
     setUserGames,
+    statistic,
     userGamesData,
   ]);
 
@@ -96,17 +106,54 @@ export const GameMainInfo = ({
           </div>
           <div className="flex flex-col gap-3 font-medium">
             <h5 className="text-lg">В списках</h5>
-            <div className="flex items-center gap-1">
-              <p className="text-white/60">Хочу поиграть:</p>
-              <p className="text-white">2</p>
-            </div>
-            <div className="flex items-center gap-1">
-              <p className="text-white/60">Играю:</p>
-              <p className="text-white">4</p>
-            </div>
-            <div className="flex items-center gap-1">
-              <p className="text-white/60">Поиграл:</p>
-              <p className="text-white">3</p>
+            <div>
+              {listsData &&
+                listsData.map((l) => (
+                  <div
+                    key={l.id}
+                    className="gap-2 grid grid-cols-1 items-center md:grid-cols-2 py-2 md:py-1"
+                  >
+                    <p className="text-white/60">{l.name}:</p>
+                    <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+                      <p>
+                        {gameStatistic.find((stat) => stat.list.id === l.id)
+                          ?.users.length || 0}
+                      </p>
+                      <div className="flex items-center">
+                        {gameStatistic &&
+                          gameStatistic
+                            .find((stat) => stat.list.id === l.id)
+                            ?.users.filter((u) =>
+                              profile?.favorites.find(
+                                (fav) =>
+                                  fav?.favorite_user_details.id === u.user.id,
+                              ),
+                            )
+                            .slice(0, 5)
+                            .map((prof) => (
+                              <Link
+                                href={`/user/${prof.id}`}
+                                className="-ml-2 first:ml-0 hover:scale-125 transition-all duration-300"
+                                key={prof.id}
+                              >
+                                <div className="flex flex-shrink-0 justify-center h-10 bg-slate-700 w-10 items-center rounded-full aspect-square overflow-hidden">
+                                  <Image
+                                    src={`${BASE_URL}${
+                                      prof?.pictures[0]?.picture ||
+                                      "/media/placeholder/avatar.jpg"
+                                    }`}
+                                    className="object-cover"
+                                    width={40}
+                                    height={40}
+                                    alt="User"
+                                  />
+                                </div>
+                              </Link>
+                            ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
             </div>
           </div>
         </div>

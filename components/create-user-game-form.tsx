@@ -15,6 +15,8 @@ import { createUserGame } from "@/api/user-game-api";
 import { Game } from "@/types/game-type";
 import { toast } from "sonner";
 import { ErrorToast } from "@/components/error-toast";
+import { useGameStatisticStore } from "@/store/game-statistic-store";
+import { useUserStore } from "@/store/user-store";
 
 const formSchema = z.object({
   list: z.string(),
@@ -24,6 +26,9 @@ export const CreateUserGameForm = ({ game }: { game: Game }) => {
   const lists = useUserGameStore((state) => state.lists);
   const userGames = useUserGameStore((state) => state.userGames);
   const setUserGames = useUserGameStore((state) => state.setUserGames);
+  const profile = useUserStore((state) => state.profile);
+  const statistic = useGameStatisticStore((state) => state.statistic);
+  const setStatistic = useGameStatisticStore((state) => state.setStatistic);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -41,26 +46,26 @@ export const CreateUserGameForm = ({ game }: { game: Game }) => {
         form.reset();
         toast(`Игра ${game?.name} добавлена в список ${values.list}`);
         if (userGames) setUserGames([...userGames, data]);
-        // if (statistic) {
-        //   const targetList = statistic.find(
-        //     (stat) => stat.list.id === data.list.id,
-        //   );
-        //
-        //   if (targetList && profile) {
-        //     setStatistic(
-        //       statistic.map((stat) =>
-        //         stat.list.id === data.list.id
-        //           ? {
-        //               ...stat,
-        //               users: [...stat.users, profile],
-        //             }
-        //           : stat,
-        //       ),
-        //     );
-        //   } else if (profile) {
-        //     setStatistic([...statistic, { list: data.list, users: [profile] }]);
-        //   }
-        // }
+        if (statistic) {
+          const targetList = statistic.find(
+            (stat) => stat.list.id === data.list.id,
+          );
+
+          if (targetList && profile) {
+            setStatistic(
+              statistic.map((stat) =>
+                stat.list.id === data.list.id
+                  ? {
+                      ...stat,
+                      users: [...stat.users, profile],
+                    }
+                  : stat,
+              ),
+            );
+          } else if (profile) {
+            setStatistic([...statistic, { list: data.list, users: [profile] }]);
+          }
+        }
       } else {
         form.reset();
         toast(<ErrorToast error={error} />);

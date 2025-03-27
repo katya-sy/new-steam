@@ -15,6 +15,8 @@ import { deleteUserGame, updateUserGame } from "@/api/user-game-api";
 import { toast } from "sonner";
 import { ErrorToast } from "@/components/error-toast";
 import { UserGame } from "@/types/user-game-type";
+import { useUserStore } from "@/store/user-store";
+import { useGameStatisticStore } from "@/store/game-statistic-store";
 
 const formSchema = z.object({
   list: z.string(),
@@ -28,6 +30,9 @@ export const UpdateUserGameForm = ({
   const lists = useUserGameStore((state) => state.lists);
   const userGames = useUserGameStore((state) => state.userGames);
   const setUserGames = useUserGameStore((state) => state.setUserGames);
+  const profile = useUserStore((state) => state.profile);
+  const statistic = useGameStatisticStore((state) => state.statistic);
+  const setStatistic = useGameStatisticStore((state) => state.setStatistic);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -45,16 +50,16 @@ export const UpdateUserGameForm = ({
         toast(`Игра ${userGame?.game.name} удалена из списков`);
         if (userGames)
           setUserGames(userGames.filter((uGame) => uGame?.id !== userGame?.id));
-        // setStatistic(
-        //   statistic
-        //     .map((listStat) => ({
-        //       ...listStat,
-        //       users: listStat.users.filter(
-        //         (user) => user.user.id !== userGame?.user,
-        //       ),
-        //     }))
-        //     .filter((listStat) => listStat.users.length),
-        // );
+        setStatistic(
+          statistic
+            .map((listStat) => ({
+              ...listStat,
+              users: listStat.users.filter(
+                (user) => user.user.id !== userGame?.user,
+              ),
+            }))
+            .filter((listStat) => listStat.users.length),
+        );
       } else {
         toast(<ErrorToast error={error} />);
       }
@@ -80,38 +85,38 @@ export const UpdateUserGameForm = ({
                 : uGame,
             ),
           );
-        // if (statistic) {
-        //   const updatedStats = statistic
-        //     .map((listStat) => ({
-        //       ...listStat,
-        //       users: listStat.users.filter(
-        //         (user) => user.user.id !== userGame?.user,
-        //       ),
-        //     }))
-        //     .filter((listStat) => listStat.users.length)
-        //
-        //   const targetList = updatedStats.find(
-        //     (stat) => stat.list.id === data.list.id,
-        //   )
-        //
-        //   if (targetList && profile) {
-        //     setStatistic(
-        //       updatedStats.map((stat) =>
-        //         stat.list.id === data.list.id
-        //           ? {
-        //             ...stat,
-        //             users: [...stat.users, profile],
-        //           }
-        //           : stat,
-        //       ),
-        //     )
-        //   } else if (profile) {
-        //     setStatistic([
-        //       ...updatedStats,
-        //       { list: data.list, users: [profile] },
-        //     ])
-        //   }
-        // }
+        if (statistic) {
+          const updatedStats = statistic
+            .map((listStat) => ({
+              ...listStat,
+              users: listStat.users.filter(
+                (user) => user.user.id !== userGame?.user,
+              ),
+            }))
+            .filter((listStat) => listStat.users.length);
+
+          const targetList = updatedStats.find(
+            (stat) => stat.list.id === data.list.id,
+          );
+
+          if (targetList && profile) {
+            setStatistic(
+              updatedStats.map((stat) =>
+                stat.list.id === data.list.id
+                  ? {
+                      ...stat,
+                      users: [...stat.users, profile],
+                    }
+                  : stat,
+              ),
+            );
+          } else if (profile) {
+            setStatistic([
+              ...updatedStats,
+              { list: data.list, users: [profile] },
+            ]);
+          }
+        }
       } else {
         toast(<ErrorToast error={error} />);
       }

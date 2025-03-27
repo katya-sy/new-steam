@@ -1,5 +1,5 @@
 import { apiInstance } from "./api-instance";
-import { Game, GameScore } from "@/types/game-type";
+import { Game, GameScore, GameStatistic } from "@/types/game-type";
 
 export const getGames = async () => {
   return apiInstance<Game[]>("/game/", {
@@ -16,6 +16,12 @@ export const createGame = async (data: FormData) => {
 
 export const getGameById = async (id: number) => {
   return apiInstance<Game>(`/game/${id}`, {
+    method: "GET",
+  });
+};
+
+export const getGameStatisticById = async (id: number) => {
+  return apiInstance<GameStatistic[]>(`/game/${id}/statistic`, {
     method: "GET",
   });
 };

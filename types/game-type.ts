@@ -1,6 +1,7 @@
 import { Profile, User } from "./user-type";
 import { GamePicture } from "./picture-type";
 import { CommentType } from "./comment-type";
+import { ListType } from "@/types/user-game-type";
 
 export type Status = {
   id: number;
@@ -27,6 +28,11 @@ export type Game = {
   tags: Tag[];
   pictures: GamePicture[];
   comments: CommentType[];
+};
+
+export type GameStatistic = {
+  list: ListType;
+  users: Profile[];
 };
 
 export type GameScore = {

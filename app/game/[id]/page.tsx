@@ -1,4 +1,8 @@
-import { getGameById, getGameScores } from "@/api/game-api";
+import {
+  getGameById,
+  getGameScores,
+  getGameStatisticById,
+} from "@/api/game-api";
 import { GameMainInfo } from "@/components/game-main-info";
 import { Header } from "@/components/header";
 import { BASE_URL } from "@/lib/consts";
@@ -12,6 +16,7 @@ export default async function Game({ params }: { params: { id: string } }) {
   const gameScoreRes = await getGameScores();
   const listRes = await getLists();
   const userGamesRes = await getUserGames();
+  const gameStatisticRes = await getGameStatisticById(Number(id));
 
   return (
     <div>
@@ -22,6 +27,7 @@ export default async function Game({ params }: { params: { id: string } }) {
           gameScores={gameScoreRes?.data}
           listsData={listRes?.data}
           userGamesData={userGamesRes?.data}
+          statistic={gameStatisticRes?.data}
         />
         <div className="gap-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
           {data?.pictures &&

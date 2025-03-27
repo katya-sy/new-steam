@@ -52,7 +52,7 @@ export const FavoriteList = ({ favorites, title, favBy, user }: Props) => {
               href={`/user/${favBy ? fav.user.id : fav.favorite_user_details.id}`}
               className="flex items-center gap-3"
             >
-              <div className="flex justify-center items-center rounded-full aspect-square overflow-hidden">
+              <div className="flex justify-center items-center bg-slate-700 h-10 w-10 rounded-full aspect-square overflow-hidden">
                 <Image
                   src={`${BASE_URL}${
                     favBy

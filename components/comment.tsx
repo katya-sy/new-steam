@@ -52,7 +52,7 @@ export const Comment = ({ comment, setComments, prevComments }: Props) => {
           <div className="flex flex-wrap justify-between items-center gap-x-10 gap-y-3">
             <div className="flex flex-wrap items-center gap-x-7 gap-y-2">
               <div className="flex items-center gap-3">
-                <div className="flex flex-shrink-0 justify-center items-center rounded-full aspect-square overflow-hidden">
+                <div className="flex flex-shrink-0 justify-center h-10 w-10 items-center bg-slate-700 rounded-full aspect-square overflow-hidden">
                   <Image
                     src={`${BASE_URL}${
                       comment.profile?.pictures[0]?.picture ||
