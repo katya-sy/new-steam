@@ -31,7 +31,7 @@ export const AuthCheck = ({ children }: Props) => {
         pathname.startsWith(path),
       );
 
-      if (isAuthRequired && !token) {
+      if ((isAuthRequired || isStaffRequired) && !token) {
         router.push(`/`);
         toast(
           <ErrorToast
@@ -62,16 +62,19 @@ export const AuthCheck = ({ children }: Props) => {
         }
       }
 
-      if (isStaffRequired && !profile?.user.is_staff) {
-        router.push("/");
-        toast(
-          <ErrorToast
-            error={{
-              message: "У Вас нет прав администратора",
-              statusCode: 403,
-            }}
-          />,
-        );
+      if (isStaffRequired && !profile) {
+        const { success, data } = await getProfile();
+        if (success && !data?.user.is_staff) {
+          router.push("/");
+          toast(
+            <ErrorToast
+              error={{
+                message: "У Вас нет прав администратора",
+                statusCode: 403,
+              }}
+            />,
+          );
+        }
         return;
       }
 

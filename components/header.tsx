@@ -46,12 +46,17 @@ export const Header = () => {
           <Link href="/">
             <Image src="/logo.svg" width={42} height={42} alt="Logo" />
           </Link>
-          <div className="flex items-center gap-5">
+          <div className="flex flex-wrap items-center gap-y-2 gap-x-5">
             {profile ? (
               <>
                 <Link className="font-medium text-blue" href="/profile">
                   Личный кабинет
                 </Link>
+                {profile.user.is_staff && (
+                  <Link className="font-medium text-blue" href="/admin">
+                    Админ-панель
+                  </Link>
+                )}
                 <button
                   onClick={logoutHandler}
                   className="font-medium text-red-500"
@@ -96,7 +101,7 @@ export const Header = () => {
           </div>
         </div>
         {pathname === "/" && (
-          <div className="w-full md:w-1/2">
+          <div className="w-full min-[900px]:w-1/2">
             <Input
               placeholder="Поиск игр..."
               value={search}
