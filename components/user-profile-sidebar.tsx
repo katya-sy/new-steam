@@ -12,27 +12,63 @@ import { useRouter } from "next/navigation";
 import { createFavorite, deleteFavorite } from "@/api/favorite-api";
 import { toast } from "sonner";
 import { ErrorToast } from "@/components/error-toast";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { ListType, UserGame } from "@/types/user-game-type";
+import { useUserGameStore } from "@/store/user-game-store";
+import { Game } from "@/types/game-type";
+import { useGameStore } from "@/store/game-store";
 
 export const UserProfileSidebar = ({
   profile,
+  gameData,
+  listsData,
+  otherUserGamesData,
+  userGamesData,
 }: {
   profile: Profile | null;
+  gameData: Game[] | null;
+  listsData: ListType[] | null;
+  otherUserGamesData: UserGame[] | null;
+  userGamesData: UserGame[] | null;
 }) => {
   const authProfile = useUserStore((state) => state.profile);
+  const setLists = useUserGameStore((state) => state.setLists);
+  const lists = useUserGameStore((state) => state.lists);
+  const games = useGameStore((state) => state.games);
+  const setGames = useGameStore((state) => state.setGames);
+  const setOtherUserGames = useUserGameStore(
+    (state) => state.setOtherUserGames,
+  );
+  const otherUserGames = useUserGameStore((state) => state.otherUserGames);
+  const setUserGames = useUserGameStore((state) => state.setUserGames);
   const router = useRouter();
   const [currentProfile, setCurrentProfile] = useState<Profile | null>();
   const [isFav, setIsFav] = useState(false);
 
   useEffect(() => {
     setCurrentProfile(profile);
+    setLists(listsData);
+    if (gameData) setGames(gameData);
+    if (otherUserGamesData) setOtherUserGames(otherUserGamesData);
+    setUserGames(userGamesData);
     if (
       authProfile?.favorites.find(
         (fav) => fav.favorite_user_details.id === profile?.user.id,
       )
     )
       setIsFav(true);
-  }, [profile, authProfile]);
+  }, [
+    profile,
+    authProfile,
+    setLists,
+    listsData,
+    gameData,
+    setGames,
+    otherUserGamesData,
+    setOtherUserGames,
+    setUserGames,
+    userGamesData,
+  ]);
 
   if (profile?.id === authProfile?.id) router.push("/profile");
 
@@ -117,30 +153,31 @@ export const UserProfileSidebar = ({
         </div>
       </div>
       <Tabs.List className="flex md:flex-col max-md:flex-wrap gap-3 max-md:row-start-3">
-        <Tabs.Trigger
-          className="flex justify-center items-center gap-3 p-2 border border-blue md:w-full font-medium tabs-trigger"
-          value="wish"
-        >
-          Хочу поиграть <span className="text-sm">28</span>
-        </Tabs.Trigger>
-        <Tabs.Trigger
-          className="flex justify-center items-center gap-3 p-2 border border-blue md:w-full font-medium tabs-trigger"
-          value="play"
-        >
-          Играю <span className="text-sm">45</span>
-        </Tabs.Trigger>
-        <Tabs.Trigger
-          className="flex justify-center items-center gap-3 max-md:mr-3 p-2 border border-blue md:w-full font-medium tabs-trigger"
-          value="finish"
-        >
-          Поиграл <span className="text-sm">23</span>
-        </Tabs.Trigger>
+        {lists &&
+          lists.map((l) => (
+            <Tabs.Trigger
+              key={l.id}
+              className="flex justify-center items-baseline gap-3 p-2 border border-blue md:w-full font-medium tabs-trigger"
+              value={l.name}
+            >
+              {l.name}{" "}
+              <span className="text-sm">
+                {otherUserGames?.filter((ug) => ug?.list.id === l.id).length ||
+                  0}
+              </span>
+            </Tabs.Trigger>
+          ))}
         <div className="flex items-center gap-3 md:gap-5 md:mt-7">
           <Tabs.Trigger
-            className="flex justify-center items-center gap-3 p-2 border border-blue md:w-full font-medium tabs-trigger"
+            className="flex justify-center items-baseline gap-3 p-2 border border-blue md:w-full font-medium tabs-trigger"
             value="add"
           >
-            Добавил <span className="text-sm">3</span>
+            Добавил{" "}
+            <span className="text-sm">
+              {games &&
+                games.filter((game) => game?.user.id === profile?.user.id)
+                  .length}
+            </span>
           </Tabs.Trigger>
         </div>
       </Tabs.List>

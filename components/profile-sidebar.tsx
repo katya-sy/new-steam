@@ -155,7 +155,7 @@ export const ProfileSidebar = ({
           lists.map((l) => (
             <Tabs.Trigger
               key={l.id}
-              className="flex justify-center items-center gap-3 p-2 border border-blue md:w-full font-medium tabs-trigger"
+              className="flex justify-center items-baseline gap-3 p-2 border border-blue md:w-full font-medium tabs-trigger"
               value={l.name}
             >
               {l.name}{" "}
@@ -166,7 +166,7 @@ export const ProfileSidebar = ({
           ))}
         <div className="flex items-center gap-3 md:gap-5 md:mt-7">
           <Tabs.Trigger
-            className="flex justify-center items-center gap-3 p-2 border border-blue md:w-full font-medium tabs-trigger"
+            className="flex justify-center items-baseline gap-3 p-2 border border-blue md:w-full font-medium tabs-trigger"
             value="add"
           >
             Добавил{" "}
